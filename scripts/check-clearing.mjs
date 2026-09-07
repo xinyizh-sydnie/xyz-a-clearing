@@ -5,7 +5,7 @@ const moduleUrl = source => `data:text/javascript;base64,${Buffer.from(source).t
 const compile = path => ts.transpileModule(readFileSync(new URL(path, import.meta.url), 'utf8'), { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText;
 const portfolioUrl = moduleUrl(compile('../lib/portfolio.ts'));
 const mapCode = compile('../lib/clearing-map.ts').replace("'./portfolio'", JSON.stringify(portfolioUrl));
-const { fitCamera, zoomAt, movePoint, works, arrangements, connections, WORLD, ZOOM } = await import(moduleUrl(mapCode));
+const { clearingCamera, focusCamera, fitCamera, zoomAt, movePoint, works, arrangements, connections, WORLD, ZOOM } = await import(moduleUrl(mapCode));
 const near = (actual, expected) => assert.ok(Math.abs(actual - expected) < 1e-8, `${actual} != ${expected}`);
 // Zooming keeps the world point under the pointer fixed, even at the bounds.
 for (const initial of [{ x: -320, y: 110, zoom: .6 }, { x: 20, y: -45, zoom: 1.3 }]) {
@@ -43,3 +43,20 @@ for (const edge of connections) {
 }
 assert.deepEqual(connected, ids);
 console.log('Camera anchors, pan/drag scaling, bounds, reset centering, and all ten connected works verified.');
+
+// Entry views preserve human scale; a selected work stays above the detail panel.
+for (const size of [{ width: 375, height: 535 }, { width: 1440, height: 680 }, { width: 1920, height: 830 }]) {
+  const entry = clearingCamera(size);
+  assert.ok(entry.zoom > fitCamera(size).zoom);
+  assert.ok(entry.zoom >= ZOOM.min && entry.zoom <= ZOOM.max);
+  for (const arrangement of ['clearing', 'connections']) {
+    for (const point of Object.values(arrangements[arrangement])) {
+      const camera = focusCamera(size, point, arrangement);
+      const x = point.x * camera.zoom + camera.x;
+      const y = point.y * camera.zoom + camera.y;
+      assert.ok(x > 0 && x < size.width && y > 0 && y < size.height * .5);
+      if (arrangement === 'clearing') assert.ok(camera.zoom > entry.zoom);
+    }
+  }
+}
+console.log('Immersive entrance and selected-work visibility verified at mobile and desktop sizes.');

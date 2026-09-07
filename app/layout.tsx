@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
 export const metadata: Metadata = {
-  title: 'xyz / A Clearing — Xinyi Zhang',
-  description: 'Landscape research and design by Xinyi Zhang, PhD student at UC Berkeley. Wildfire risk, defensible space, and the places we inhabit.',
+  title: 'xyz / A Clearing — Sydnie Zhang',
+  description: 'Xinyi (Sydnie) Zhang is a landscape architect and climate hazard researcher, and a PhD student at UC Berkeley. Research, landscape architecture, and drawings.',
   icons: { icon: './favicon.svg' },
 };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

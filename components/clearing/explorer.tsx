@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/compone
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Slider } from '@/components/ui/slider';
 import { base, folioImage } from '@/lib/portfolio';
-import { arrangements, connections, fitCamera, movePoint, works, WORLD, zoomAt, type Arrangement, type Camera, type Point, type Size, type WorkId } from '@/lib/clearing-map';
+import { arrangements, connections, clearingCamera, focusCamera, fitCamera, movePoint, works, WORLD, zoomAt, type Arrangement, type Camera, type Point, type Size, type WorkId } from '@/lib/clearing-map';
 
 const workImage = (work: typeof works[number]) => work.image === 'portfolio' ? folioImage(work.cover, true) : `${base}/images/${work.image === 'defensible' ? 'defensible-design.jpg' : 'clearing.png'}`;
 type PointerGesture = { origin: Point; camera: Camera; distance?: number };
@@ -28,6 +28,7 @@ export function ClearingExplorer({ onOpen, visited }: { onOpen: (id: WorkId) => 
   const [movedNode, setMovedNode] = useState<WorkId | null>(null);
   const [hasRearranged, setHasRearranged] = useState(false);
   const cameraRef = useRef(camera);
+  const arrangementRef = useRef(arrangement);
   const pointers = useRef(new Map<number, Point>());
   const gesture = useRef<PointerGesture | null>(null);
   const nodeGesture = useRef<NodeGesture | null>(null);
@@ -44,7 +45,7 @@ export function ClearingExplorer({ onOpen, visited }: { onOpen: (id: WorkId) => 
     const observer = new ResizeObserver(([entry]) => {
       const next = { width: entry.contentRect.width, height: entry.contentRect.height };
       if (next.width === 0 || next.height === 0) return;
-      setSize(next); applyCamera(fitCamera(next));
+      setSize(next); applyCamera(arrangementRef.current === 'clearing' ? clearingCamera(next) : fitCamera(next));
     });
     observer.observe(viewport);
     return () => observer.disconnect();
@@ -60,14 +61,12 @@ export function ClearingExplorer({ onOpen, visited }: { onOpen: (id: WorkId) => 
     viewport.addEventListener('wheel', wheel, { passive: false });
     return () => viewport.removeEventListener('wheel', wheel);
   }, [viewport, expanded, applyCamera]);
-  function reset() { setActive(null); setHovered(null); setPositions(arrangements[arrangement]); setHasRearranged(false); applyCamera(fitCamera(size)); }
-  function changeArrangement(value: string) { const next = value as Arrangement; setArrangement(next); setPositions(arrangements[next]); setHasRearranged(false); setActive(null); setHovered(null); applyCamera(fitCamera(size)); }
+  function reset() { setActive(null); setHovered(null); setPositions(arrangements[arrangement]); setHasRearranged(false); applyCamera(arrangement === 'clearing' ? clearingCamera(size) : fitCamera(size)); }
+  function changeArrangement(value: string) { const next = value as Arrangement; arrangementRef.current = next; setArrangement(next); setPositions(arrangements[next]); setHasRearranged(false); setActive(null); setHovered(null); applyCamera(next === 'clearing' ? clearingCamera(size) : fitCamera(size)); }
   function focusWork(id: WorkId) {
     const point = positions[id];
-    const zoom = size.width < 600 ? .9 : .92;
-    const target = size.width < 600 ? { x: size.width * .5, y: size.height * .28 } : { x: size.width * .48, y: size.height * .40 };
     setActive(id); setEncountered(old => old.includes(id) ? old : [...old, id]);
-    applyCamera({ x: target.x - point.x * zoom, y: target.y - point.y * zoom, zoom });
+    applyCamera(focusCamera(size, point, arrangement));
   }
   function wander() {
     const unseen = works.filter(work => !encountered.includes(work.id) && work.id !== active);
@@ -149,12 +148,12 @@ export function ClearingExplorer({ onOpen, visited }: { onOpen: (id: WorkId) => 
           </button>
         </div>)}
       </div>
-      {!active && <div className="explorer-invitation" aria-hidden="true"><span>Find your own way through.</span><span>10 works, many connections.</span></div>}
+
       {current && <aside className="work-inspector" aria-label="Selected work" aria-live="polite"><Button variant="ghost" size="icon" className="inspector-close" aria-label="Close selected work" onClick={() => setActive(null)}><X size={16} /></Button><img className="inspector-image" src={workImage(current)} alt="" /><div className="inspector-copy"><span className="eyebrow">{current.number} / {current.category}</span><h3>{current.title}</h3><p>{current.question}</p><div className="inspector-actions"><Button className="inspector-open" onClick={() => openWork(current.id)}>Open project <ArrowUpRight size={15} /></Button><Button variant="ghost" className="collect-work" onClick={() => gather(current.id)} aria-pressed={gathered.includes(current.id)}>{gathered.includes(current.id) ? <Check size={15} /> : <Plus size={15} />}{gathered.includes(current.id) ? 'Gathered' : 'Gather'}</Button></div>{arrangement === 'connections' && <div className="related-works"><span>Follow a connection</span>{connections.filter(edge => edge.from === current.id || edge.to === current.id).slice(0,3).map(edge => { const other = edge.from === current.id ? edge.to : edge.from; return <button key={other} onClick={() => focusWork(other)}>{edge.label}<ArrowRight size={12} /></button>; })}</div>}</div></aside>}
-      <div className="map-zoom"><Button variant="ghost" size="icon" aria-label="Zoom in on the clearing" onClick={() => applyCamera(old => zoomAt(old, old.zoom * 1.25, { x: size.width / 2, y: size.height / 2 }))}><Plus size={17} /></Button><Button variant="ghost" size="icon" aria-label="Zoom out of the clearing" onClick={() => applyCamera(old => zoomAt(old, old.zoom / 1.25, { x: size.width / 2, y: size.height / 2 }))}><Minus size={17} /></Button><Button variant="ghost" size="icon" aria-label="Reset view and arrangement" onClick={reset}><RotateCcw size={15} /></Button></div>
+      <div className="map-orientation"><Button variant="ghost" className="overview-action" onClick={() => { setActive(null); setHovered(null); applyCamera(fitCamera(size)); }}>Overview</Button><button className="map-navigator" aria-label="Move within the clearing. Click a location on the overview map." onClick={event => { const rect = event.currentTarget.getBoundingClientRect(); const point = { x: (event.clientX - rect.left) / rect.width * WORLD.width, y: (event.clientY - rect.top) / rect.height * WORLD.height }; if(event.detail === 0) { applyCamera(fitCamera(size)); return; } setActive(null); applyCamera(old => ({ ...old, x: size.width / 2 - point.x * old.zoom, y: size.height / 2 - point.y * old.zoom })); }}><svg viewBox={`0 0 ${WORLD.width} ${WORLD.height}`} aria-hidden="true"><rect className="navigator-extent" x={-camera.x / camera.zoom} y={-camera.y / camera.zoom} width={size.width / camera.zoom} height={size.height / camera.zoom} />{works.map(work => <circle key={work.id} cx={positions[work.id].x} cy={positions[work.id].y} r={active === work.id ? 32 : 20} className={active === work.id ? 'navigator-active' : ''} />)}</svg></button></div><div className="map-zoom"><Button variant="ghost" size="icon" aria-label="Zoom in on the clearing" onClick={() => applyCamera(old => zoomAt(old, old.zoom * 1.25, { x: size.width / 2, y: size.height / 2 }))}><Plus size={17} /></Button><Button variant="ghost" size="icon" aria-label="Zoom out of the clearing" onClick={() => applyCamera(old => zoomAt(old, old.zoom / 1.25, { x: size.width / 2, y: size.height / 2 }))}><Minus size={17} /></Button><Button variant="ghost" size="icon" aria-label="Reset view and arrangement" onClick={reset}><RotateCcw size={15} /></Button></div>
     </div>
     {collectionOpen && <div className="gathered-tray" aria-label="Works gathered during this visit"><div className="gathered-heading"><span>My gathered works <span>({gathered.length})</span></span><Button variant="ghost" size="icon" aria-label="Close gathered works" onClick={() => setCollectionOpen(false)}><X size={16} /></Button></div>{gathered.length ? <div className="gathered-items">{gathered.map(id => { const work = works.find(item => item.id === id)!; return <div className="gathered-item" key={id}><button onClick={() => { setCollectionOpen(false); focusWork(id); }}><img src={workImage(work)} alt=""/><span>{work.title}</span></button><button className="remove-gathered" aria-label={`Remove ${work.title} from gathered works`} onClick={() => gather(id)}><X size={13} /></button></div>; })}</div> : <p>Open a work and choose “Gather” to keep a few favorites here while you explore.</p>}</div>}
-    <div className="explorer-bottom"><span><Move size={13} /> <span className="mouse-instruction">Drag the clearing · drag a work to rearrange</span><span className="touch-instruction">Drag to move · pinch to zoom</span></span><span className="map-arrangement-status">{hasRearranged ? <><Grip size={13} /> Your arrangement</> : 'Xinyi Zhang / A field of work'}</span><div className="explorer-scale"><span>{Math.round(camera.zoom * 100)}%</span><Slider value={[camera.zoom * 100]} min={25} max={220} step={5} aria-label="Clearing zoom" onValueChange={value => {setMoving(true);applyCamera(old => zoomAt(old, (Array.isArray(value) ? value[0] : value) / 100, { x: size.width / 2, y: size.height / 2 }));}} onValueCommitted={()=>setMoving(false)} /></div></div>
+    <div className="explorer-bottom"><span><Move size={13} /> <span className="mouse-instruction">Drag the clearing · drag a work to rearrange</span><span className="touch-instruction">Drag to move · pinch to zoom</span></span><span className="map-arrangement-status">{hasRearranged ? <><Grip size={13} /> Your arrangement</> : 'Sydnie Zhang'}</span><div className="explorer-scale"><span>{Math.round(camera.zoom * 100)}%</span><Slider value={[camera.zoom * 100]} min={25} max={220} step={5} aria-label="Clearing zoom" onValueChange={value => {setMoving(true);applyCamera(old => zoomAt(old, (Array.isArray(value) ? value[0] : value) / 100, { x: size.width / 2, y: size.height / 2 }));}} onValueCommitted={()=>setMoving(false)} /></div></div>
   </div>;
-  return <><div className="explorer-mount">{!expanded ? surface : <div className="expanded-placeholder"><p>The clearing is open.</p><Button variant="outline" onClick={() => setExpanded(false)}>Return to the page</Button></div>}</div><Dialog open={expanded} onOpenChange={setExpanded}><DialogContent className="expanded-explorer" showCloseButton={false}><DialogTitle className="sr-only">Explore A Clearing</DialogTitle><DialogDescription className="sr-only">An interactive field of Xinyi Zhang’s research and landscape projects.</DialogDescription>{expanded && surface}</DialogContent></Dialog></>;
+  return <><div className="explorer-mount">{!expanded ? surface : <div className="expanded-placeholder"><p>The clearing is open.</p><Button variant="outline" onClick={() => setExpanded(false)}>Return to the page</Button></div>}</div><Dialog open={expanded} onOpenChange={setExpanded}><DialogContent className="expanded-explorer" showCloseButton={false}><DialogTitle className="sr-only">Explore A Clearing</DialogTitle><DialogDescription className="sr-only">An interactive field of Sydnie Zhang’s research and landscape projects.</DialogDescription>{expanded && surface}</DialogContent></Dialog></>;
 }

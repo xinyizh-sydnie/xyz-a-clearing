@@ -45,6 +45,15 @@ export function fitCamera(size: Size): Camera {
   const zoom = Math.max(ZOOM.min, Math.min(1, (size.width - 80) / WORLD.width, (size.height - 110) / WORLD.height));
   return { x: (size.width - WORLD.width * zoom) / 2, y: (size.height - WORLD.height * zoom) / 2, zoom };
 }
+// The landscape starts close enough to enter; the connection diagram retains an overview.
+export function clearingCamera(size: Size): Camera {
+  const zoom = Math.min(ZOOM.max, Math.max(.68, size.width / 1350, size.height / 830));
+  return { x: size.width / 2 - 750 * zoom, y: size.height * .48 - 440 * zoom, zoom };
+}
+export function focusCamera(size: Size, point: Point, arrangement: Arrangement): Camera {
+  const zoom = arrangement === 'clearing' ? Math.min(1.9, clearingCamera(size).zoom * 1.55) : .92;
+  return { x: size.width * (size.width < 600 ? .5 : .55) - point.x * zoom, y: size.height * .32 - point.y * zoom, zoom };
+}
 export function zoomAt(camera: Camera, zoom: number, anchor: Point): Camera {
   const bounded = Math.min(ZOOM.max, Math.max(ZOOM.min, zoom));
   const ratio = bounded / camera.zoom;
