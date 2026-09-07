@@ -1,11 +1,12 @@
 'use client';
 import { useEffect, useState, useRef } from 'react';
-import { ArrowDown, ArrowRight, ArrowUpRight, BookOpen, Map, Plus, X } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, BookOpen, Map } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { PortfolioIndex, PortfolioReader } from '@/components/clearing/portfolio';
-import { portfolio, folioImage, type PortfolioId } from '@/lib/portfolio';
+import { ClearingExplorer } from '@/components/clearing/explorer';
+import { portfolio, type PortfolioId } from '@/lib/portfolio';
 
 type View = 'explore' | 'academic';
 type Entry = 'wildfire' | 'defensible' | 'landscape' | 'about' | 'cv' | PortfolioId;
@@ -18,18 +19,9 @@ const projects = [
 ];
 const validEntry = (value:string | null):value is Entry => ['wildfire','defensible','landscape','about','cv',...portfolio.map(p=>p.id)].includes(value || '');
 
-const paths = [
-  { name: 'Fire & change', stops: ['wildfire', 'defensible', 'back-to-homeland'] },
-  { name: 'Water & time', stops: ['living-with-water', 'sediment-harvester', 'natural-as-calendar'] },
-  { name: 'Home & belonging', stops: ['bride-market', 'ycd2050', 'back-to-homeland', 'homeland-drawings'] },
-] as const;
-
 export default function Home() {
   const [view,setView] = useState<View>('explore');
   const [selected,setSelected] = useState<Entry | null>(null);
-  const [hovered,setHovered] = useState<string | null>(null);
-  const [walk,setWalk] = useState<number | null>(null);
-  const [stop,setStop] = useState(0);
   const [folioPage,setFolioPage] = useState(1);
   const [visited,setVisited] = useState<string[]>([]);
   const sheetScroll = useRef<HTMLDivElement>(null);
@@ -57,7 +49,7 @@ export default function Home() {
     page?u.searchParams.set('page',String(page)):u.searchParams.delete('page');
     window.history[replace?'replaceState':'pushState']({},'',u);
   }
-  function changeView(value:string){const next=value as View;setView(next);setWalk(null);setHovered(null);url(next,selected,isFolio?folioPage:undefined);}
+  function changeView(value:string){const next=value as View;setView(next);url(next,selected,isFolio?folioPage:undefined);}
   function open(entry:Entry,page?:number){
     const chapter=portfolio.find(p=>p.id===entry);
     const nextPage=page??chapter?.start??1;
@@ -65,34 +57,19 @@ export default function Home() {
   }
   function close(){setSelected(null);url(view,null);}
   function turnPage(page:number){setFolioPage(page);url(view,selected,page,true);}
-  function startPath(index:number){setWalk(index);setStop(0);}
-  const stops=paths[walk??0].stops;
-  const stopId=stops[stop];
-  const stopWork=projects.find(p=>p.id===stopId)??portfolio.find(p=>p.id===stopId)!;
-  const stopFolio=portfolio.find(p=>p.id===stopId);
-  const active=walk===null?hovered:(stopFolio?'landscape':stopId);
   return <Tabs value={view} onValueChange={changeView} className="site-shell">
     <a href="#main-content" className="skip-link">Skip to content</a>
     <header className="site-header">
-      <a className="wordmark" href={base+'/'} aria-label="xyz / a clearing home"><span className="xyz">xyz<span>·</span></span><span className="divider">/</span><span className="clearing-word">a clearing</span></a>
+      <a className="wordmark" href={base+'/'} aria-label="xyz / A Clearing home"><span className="xyz">xyz<span>·</span></span><span className="divider">/</span><span className="clearing-word">A Clearing</span></a>
       <nav className="main-nav" aria-label="Main navigation"><a className="portfolio-nav" href="#portfolio" onClick={event=>{if(view!=='explore'){event.preventDefault();changeView('explore');requestAnimationFrame(()=>document.getElementById('portfolio')?.scrollIntoView({behavior:'smooth'}));}}}>Portfolio</a><Button variant="ghost" className="nav-button" onClick={()=>open('about')}>About</Button><Button variant="ghost" className="nav-button" onClick={()=>open('cv')}>CV</Button><a className="hello-link" href="mailto:xinyi_zh@berkeley.edu">Say hello <ArrowUpRight size={15}/></a></nav>
       <TabsList className="view-switch" aria-label="Website view"><TabsTrigger className="view-button" value="explore"><Map size={14}/> Explore</TabsTrigger><TabsTrigger className="view-button" value="academic"><BookOpen size={14}/> Academic</TabsTrigger></TabsList>
     </header>
     <main id="main-content">
       <TabsContent value="explore" className="explore-view">
-        <section className="clearing-scene" aria-label="Explore Xinyi Zhang's work">
-          <div className="intro"><p className="eyebrow">Xinyi Zhang · UC Berkeley</p><h1>How do we live <br/>with changing <br/><em>landscapes?</em></h1><p className="intro-copy">I study wildfire and design landscapes. <br/>This is a small clearing for my <br/>research, drawings, and questions.</p><Button variant="ghost" className="walk-button" onClick={()=>startPath(walk===null?0:(walk+1)%paths.length)}>Take a little walk <ArrowRight size={18}/></Button><div className="path-choices" aria-label="Choose an exploration path">{paths.map((path,index)=><button key={path.name} onClick={()=>startPath(index)} aria-pressed={walk===index}><span className={`path-dot path-dot-${index}`} aria-hidden="true"/>{path.name}</button>)}</div></div>
-          <div className={`garden ${active?'garden-focused':''}`}><img className="garden-art" src={asset('clearing.png')} width="1536" height="1024" fetchPriority="high" alt="An illustrated clearing with a small house, meadow, birch trees, and an open field notebook."/>
-            <div className="garden-points">{projects.map(p=><button key={p.id} type="button" className={`garden-point point-${p.id} ${active===p.id?'is-focused':''}`} onClick={()=>open(p.id)} onMouseEnter={()=>setHovered(p.id)} onMouseLeave={()=>setHovered(null)} onFocus={()=>setHovered(p.id)} onBlur={()=>setHovered(null)} aria-label={`Explore ${p.title}`}><span className="point-anchor"><Plus size={14} strokeWidth={1.6}/></span><span className="point-caption"><span className="point-meta">{p.number} / {p.category}</span><span className="point-name">{p.title}<ArrowUpRight size={14}/></span></span></button>)}</div>
-            <span className="garden-note" aria-hidden="true">a place to look<br/>a little closer</span>
-          </div>
-          <div className="scene-bottom"><span className="coordinates"><span className="coord-cross" aria-hidden="true">+</span> 37.87° N &nbsp; 122.26° W <span className="coordinate-location">Berkeley, California</span></span><span className="scene-hint">Choose a little place to begin <ArrowUpRight size={15}/></span><a href="#portfolio" className="scroll-link" aria-label="Scroll to the complete portfolio"><ArrowDown size={18}/></a></div>
-          {walk!==null&&<div className="walk-guide" role="region" aria-live="polite" aria-label="Guided exploration">
-            {stopFolio&&<img className="walk-preview" src={folioImage(stopFolio.cover,true)} alt=""/>}
-            <div className="walk-guide-copy"><span className="eyebrow">{paths[walk].name} · Stop {stop+1} / {stops.length}</span><p>{stopWork.question}</p><span className="walk-work-title">{stopWork.title}</span><div className="walk-progress">{stops.map((id,index)=><button key={id} className={stop===index?'current-stop':''} aria-label={`Go to stop ${index+1}`} aria-current={stop===index?'step':undefined} onClick={()=>setStop(index)} />)}</div></div>
-            <Button className="small-action" onClick={()=>open(stopId)}>Look closer <ArrowUpRight size={15}/></Button><Button variant="ghost" className="guide-next" onClick={()=>{if(stop+1===stops.length)startPath((walk+1)%paths.length);else setStop(stop+1);}}>{stop+1===stops.length?'Another path':'Next stop'} <ArrowRight size={15}/></Button><Button variant="ghost" size="icon" className="walk-close" aria-label="End guided walk" onClick={()=>setWalk(null)}><X size={16}/></Button>
-          </div>}
-
+        <section className="clearing-section" aria-label="Explore Xinyi Zhang's work">
+          <div className="clearing-introduction"><h1>How do we live with<br/>changing landscapes?</h1><div><p>I’m Xinyi Zhang, a landscape researcher and designer.<br/>I study wildfire and the places we inhabit.</p><span className="eyebrow">PhD student / UC Berkeley</span></div></div>
+          <ClearingExplorer onOpen={open} visited={visited}/>
+          <div className="clearing-after"><span>37.87° N / 122.26° W — Berkeley, California</span><a href="#portfolio">The complete portfolio <ArrowRight size={15}/></a></div>
         </section>
         <section id="research-work" className="selected-work"><div className="section-heading"><div><p className="eyebrow">Research, unfolding</p><h2>Reading a changing landscape.</h2></div><Button variant="ghost" className="text-action" onClick={()=>changeView('academic')}>View research index <ArrowUpRight size={16}/></Button></div>
           <div className="research-feature"><button className="research-feature-image" onClick={()=>open('defensible')}><img src={asset('defensible-design.jpg')} alt="Evidence-informed design workflow and generated parcel alternatives from the research report." loading="lazy"/><span>Explore the project <ArrowUpRight size={17}/></span></button><div className="research-feature-copy"><p className="eyebrow">Research in progress / 2026</p><h3>Where the Fire Stopped</h3><p>From post-fire landscape evidence to the design of the spaces around our homes.</p><Button variant="ghost" className="text-action" onClick={()=>open('defensible')}>Evidence, design, and questions <ArrowRight size={16}/></Button></div></div>
@@ -111,7 +88,7 @@ export default function Home() {
         </div>
       </TabsContent>
     </main>
-    <footer className="site-footer"><span>xyz / a clearing</span><span>Research, landscapes, and things in between.</span><a href="mailto:xinyi_zh@berkeley.edu">Let’s be in touch <ArrowUpRight size={14}/></a></footer>
+    <footer className="site-footer"><span>xyz / A Clearing</span><span>Research, landscapes, and things in between.</span><a href="mailto:xinyi_zh@berkeley.edu">Let’s be in touch <ArrowUpRight size={14}/></a></footer>
     <PortfolioReader entry={isFolio ? selected as PortfolioId | 'landscape' : null} page={folioPage} onPageChange={turnPage} onProjectChange={open} onClose={close}/><Sheet open={selected!==null&&!isFolio} onOpenChange={isOpen=>{if(!isOpen)close();}}><SheetContent className="project-sheet" ref={sheetScroll}>
       {project?<><div className="sheet-copy"><p className="eyebrow">{project.number} / {project.category}</p><SheetTitle className="sheet-heading">{project.title}</SheetTitle><SheetDescription className="sheet-subtitle">{project.subtitle}</SheetDescription><p className="project-question">{project.question}</p><p>{project.description}</p><div className="project-tags">{project.tags.map(t=><span key={t}>{t}</span>)}</div></div>
         {project.id==='wildfire'?<div className="research-note"><p className="eyebrow">Environmental Research Letters · 2026</p><p className="research-note-title">Hazards.<br/>Pathways.<br/>Uneven exposure.</p><p>Xinyi Zhang & Lu Liang</p><a href={project.link} target="_blank" rel="noreferrer">Read the published paper <ArrowUpRight size={16}/></a></div>:<figure className="project-figure"><img src={asset(project.image)} alt={project.id==='landscape'?'Back to Homeland: original illustration by Xinyi Zhang.':'Evidence-informed design workflow and alternative parcel plans.'}/><figcaption>{project.id==='landscape'?'Back to Homeland · From the design portfolio':'Evidence-informed generative design · From the Autodesk submission'}</figcaption></figure>}
