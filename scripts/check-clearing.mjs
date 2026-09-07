@@ -82,27 +82,36 @@ for(const f of paperFigures)assert.ok(f.page>=1&&f.page<=26);
 console.log('Near/far travel endpoints, monotonic zoom, readable network scale, and published research shares verified.');
 
 const journeyModule=await import(moduleUrl(compile('../lib/journey.ts').replace("'./portfolio'",JSON.stringify(portfolioUrl))));
-const {journey,journeyFrame,clearingViews,wrapBearing,boundJourneyCamera,scenePoint}=journeyModule;
-assert.equal(journey[0].work,'wildfire');
-assert.equal(journey.at(-1).id,'clearing');
+const {journey,journeyFrame,clearingPaths,boundJourneyCamera,scenePoint}=journeyModule;
+assert.equal(journey[0].kind,'clearing');
+assert.equal(journey.at(-1).kind,'clearing');
+assert.equal(journey[0].image,journey.at(-1).image);
+assert.equal(journey[1].work,'wildfire');
 assert.deepEqual(new Set(journey.map(scene=>scene.work)),ids);
 assert.equal(new Set(journey.map(scene=>scene.image)).size,10);
 // Native scroll can overshoot either end without losing a valid scene.
-for(const position of [-100,0,.61,.81,.999,1,4.7,8.999,9,100]) {
+for(const position of [-100,0,.61,.81,.999,1,4.7,9.999,10,100]) {
  const frame=journeyFrame(position);
  assert.ok(journey[frame.index]&&journey[frame.next]);
  assert.ok(frame.blend>=0&&frame.blend<=1);
- assert.equal(frame.arrived,position>=8.999);
+ assert.equal(frame.arrived,position>=9.999);
 }
 for(let index=1;index<journey.length;index++) {
  const before=journeyFrame(index-.000001),after=journeyFrame(index);
  assert.equal(before.next,after.index);assert.ok(before.blend>.999);
 }
-// Repeated left/right turns remain on the ring and return to the same view.
-for(let bearing=-100;bearing<100;bearing++) {
- assert.ok(journey[clearingViews[wrapBearing(bearing)]]);
- assert.equal(wrapBearing(bearing),wrapBearing(bearing+clearingViews.length));
- assert.equal(wrapBearing(wrapBearing(bearing)+1-1),wrapBearing(bearing));
+// Every surrounding scene has a path from the clearing and belongs to the walk.
+assert.deepEqual(new Set(clearingPaths.map(path=>path.scene)),new Set(journey.filter(scene=>scene.kind!=='clearing').map(scene=>scene.id)));
+for(const path of clearingPaths) {
+ assert.ok(path.x>0&&path.x<1&&path.y>0&&path.y<1);
+ assert.ok(journey.findIndex(scene=>scene.id===path.scene)>0);
+}
+// A contained overview keeps every anchor visible at small and large viewports.
+for(const size of [{width:375,height:510},{width:1440,height:560},{width:820,height:820}]) {
+ for(const path of [...clearingPaths,journey[0].object]) {
+  const point=scenePoint({...journey[0],object:path},size);
+  assert.ok(point.x>=0&&point.x<=size.width&&point.y>=0&&point.y<=size.height);
+ }
 }
 // Pan and zoom must never reveal an empty edge, including after zooming out.
 for(const size of [{width:375,height:510},{width:1440,height:560},{width:820,height:820}]) {
@@ -117,7 +126,7 @@ for(const size of [{width:375,height:510},{width:1440,height:560},{width:820,hei
  }
  for(const scene of journey){const point=scenePoint(scene,size);assert.ok(Number.isFinite(point.x)&&Number.isFinite(point.y));}
 }
-console.log('All ten journey destinations, continuous scene boundaries, circular views, and gap-free pan/zoom verified.');
+console.log('All project paths return to the shared clearing; scene boundaries, visible overview anchors, and gap-free pan/zoom verified.');
 
 for(const scene of journey) {
  const file = new URL('../public/images/journey/'+scene.image,import.meta.url);

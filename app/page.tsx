@@ -68,7 +68,7 @@ export default function Home() {
     <main id="main-content">
       <TabsContent value="explore" className="explore-view">
         <section className="clearing-section" aria-label="Explore Sydnie Zhang's work">
-          <div className="clearing-introduction"><h1 className="display-heading">Sydnie Zhang</h1><div><p>Landscape architect and<br/>climate hazard researcher.</p><span className="eyebrow">PhD student / UC Berkeley</span></div></div>
+          <div className="clearing-introduction"><h1 className="display-heading">Sydnie Zhang</h1><p className="clearing-concept">A Clearing brings research, landscape design, and drawing into a shared landscape. It is a place to pause, move between scales, and notice connections: between fire and the city, water and settlement, small ecologies and everyday life. Each path offers a different way of looking at the places we inhabit.</p></div>
           <SceneJourney onOpen={open} visited={visited}/>
           <div className="clearing-after"><span>37.87° N / 122.26° W — Berkeley, California</span><a href="#portfolio">Portfolio <ArrowRight size={15}/></a></div>
         </section>
