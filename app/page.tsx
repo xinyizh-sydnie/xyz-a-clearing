@@ -5,6 +5,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { PortfolioIndex, PortfolioReader } from '@/components/clearing/portfolio';
+import { ResearchSection, ResearchReader } from '@/components/clearing/research';
 import { ClearingExplorer } from '@/components/clearing/explorer';
 import { portfolio, type PortfolioId } from '@/lib/portfolio';
 
@@ -61,20 +62,17 @@ export default function Home() {
     <a href="#main-content" className="skip-link">Skip to content</a>
     <header className="site-header">
       <a className="wordmark" href={base+'/'} aria-label="xyz / A Clearing home"><span className="xyz">xyz<span>·</span></span><span className="divider">/</span><span className="clearing-word">A Clearing</span></a>
-      <nav className="main-nav" aria-label="Main navigation"><a className="portfolio-nav" href="#portfolio" onClick={event=>{if(view!=='explore'){event.preventDefault();changeView('explore');requestAnimationFrame(()=>document.getElementById('portfolio')?.scrollIntoView({behavior:'smooth'}));}}}>Portfolio</a><Button variant="ghost" className="nav-button" onClick={()=>open('about')}>About</Button><Button variant="ghost" className="nav-button" onClick={()=>open('cv')}>CV</Button><a className="hello-link" href="mailto:xinyi_zh@berkeley.edu">Contact <ArrowUpRight size={15}/></a></nav>
+      <nav className="main-nav" aria-label="Main navigation"><a className="portfolio-nav" href="#portfolio" onClick={event=>{if(view!=='explore'){event.preventDefault();changeView('explore');requestAnimationFrame(()=>document.getElementById('portfolio')?.scrollIntoView({behavior:'smooth'}));}}}>Portfolio</a><Button variant="ghost" className="nav-button" onClick={()=>open('about')}>About</Button><Button variant="ghost" className="nav-button" onClick={()=>open('cv')}>CV</Button><a className="contact-link" href="mailto:xinyi_zh@berkeley.edu">Contact <ArrowUpRight size={15}/></a></nav>
       <TabsList className="view-switch" aria-label="Website view"><TabsTrigger className="view-button" value="explore"><Map size={14}/> Explore</TabsTrigger><TabsTrigger className="view-button" value="academic"><BookOpen size={14}/> Academic</TabsTrigger></TabsList>
     </header>
     <main id="main-content">
       <TabsContent value="explore" className="explore-view">
         <section className="clearing-section" aria-label="Explore Sydnie Zhang's work">
-          <div className="clearing-introduction"><h1 className="display-heading">Sydnie Zhang</h1><div><p>Landscape architect and<br/>climate hazard researcher.</p><span className="eyebrow">PhD student / UC Berkeley</span></div></div>
+          <div className="clearing-introduction"><h1>Sydnie Zhang</h1><div><p>Landscape architect and<br/>climate hazard researcher.</p><span className="eyebrow">PhD student / UC Berkeley</span></div></div>
           <ClearingExplorer onOpen={open} visited={visited}/>
           <div className="clearing-after"><span>37.87° N / 122.26° W — Berkeley, California</span><a href="#portfolio">Portfolio <ArrowRight size={15}/></a></div>
         </section>
-        <section id="research-work" className="selected-work"><div className="section-heading"><div><h2 className="display-heading">Research</h2></div><Button variant="ghost" className="text-action" onClick={()=>changeView('academic')}>View research index <ArrowUpRight size={16}/></Button></div>
-          <div className="research-feature"><button className="research-feature-image" onClick={()=>open('defensible')}><img src={asset('defensible-design.jpg')} alt="Evidence-informed design workflow and generated parcel alternatives from the research report." loading="lazy"/><span>Explore the project <ArrowUpRight size={17}/></span></button><div className="research-feature-copy"><p className="eyebrow">Research in progress / 2026</p><h3>Where the Fire Stopped</h3><p>From post-fire landscape evidence to the design of the spaces around our homes.</p><Button variant="ghost" className="text-action" onClick={()=>open('defensible')}>Evidence, design, and questions <ArrowRight size={16}/></Button></div></div>
-          <button className="publication-strip" onClick={()=>open('wildfire')}><BookOpen className="pub-symbol" size={23}/><span><span className="eyebrow">Recently published · Environmental Research Letters</span><strong>Wildfire as urban risk</strong></span><span className="publication-year">2026</span><ArrowUpRight size={20}/></button>
-        </section>
+        <ResearchSection onOpen={open} onAcademic={()=>changeView('academic')}/>
         <PortfolioIndex onOpen={open} onReadAll={()=>open('landscape')} visited={visited}/>
 
       </TabsContent>
@@ -89,7 +87,7 @@ export default function Home() {
       </TabsContent>
     </main>
     <footer className="site-footer"><span>xyz / A Clearing</span><span>Xinyi (Sydnie) Zhang</span><a href="mailto:xinyi_zh@berkeley.edu">Contact <ArrowUpRight size={14}/></a></footer>
-    <PortfolioReader entry={isFolio ? selected as PortfolioId | 'landscape' : null} page={folioPage} onPageChange={turnPage} onProjectChange={open} onClose={close}/><Sheet open={selected!==null&&!isFolio} onOpenChange={isOpen=>{if(!isOpen)close();}}><SheetContent className="project-sheet" ref={sheetScroll}>
+    <PortfolioReader entry={isFolio ? selected as PortfolioId | 'landscape' : null} page={folioPage} onPageChange={turnPage} onProjectChange={open} onClose={close}/><ResearchReader open={selected==='wildfire'} onClose={close}/><Sheet open={selected!==null&&!isFolio&&selected!=='wildfire'} onOpenChange={isOpen=>{if(!isOpen)close();}}><SheetContent className="project-sheet" ref={sheetScroll}>
       {project?<><div className="sheet-copy"><p className="eyebrow">{project.number} / {project.category}</p><SheetTitle className="sheet-heading">{project.title}</SheetTitle><SheetDescription className="sheet-subtitle">{project.subtitle}</SheetDescription><p className="project-question">{project.question}</p><p>{project.description}</p><div className="project-tags">{project.tags.map(t=><span key={t}>{t}</span>)}</div></div>
         {project.id==='wildfire'?<div className="research-note"><p className="eyebrow">Environmental Research Letters · 2026</p><p className="research-note-title">Hazards.<br/>Pathways.<br/>Uneven exposure.</p><p>Xinyi Zhang & Lu Liang</p><a href={project.link} target="_blank" rel="noreferrer">Read the published paper <ArrowUpRight size={16}/></a></div>:<figure className="project-figure"><img src={asset(project.image)} alt={project.id==='landscape'?'Back to Homeland: original illustration by Xinyi Zhang.':'Evidence-informed design workflow and alternative parcel plans.'}/><figcaption>{project.id==='landscape'?'Back to Homeland · From the design portfolio':'Evidence-informed landscape alternatives'}</figcaption></figure>}
         <div className="sheet-copy">{project.id==='defensible'&&<><h3>From observation to alternatives</h3><p>The prototype connects landscape measurements, generated alternatives, independent review, and environmental comparisons. Its study includes 7,122 single-family homes within the Eaton Fire perimeter.</p><p className="project-caveat">Research prototype. Candidate designs retain their review status; they are not certified fire-safety recommendations.</p></>}

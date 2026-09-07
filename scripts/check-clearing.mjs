@@ -5,7 +5,7 @@ const moduleUrl = source => `data:text/javascript;base64,${Buffer.from(source).t
 const compile = path => ts.transpileModule(readFileSync(new URL(path, import.meta.url), 'utf8'), { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText;
 const portfolioUrl = moduleUrl(compile('../lib/portfolio.ts'));
 const mapCode = compile('../lib/clearing-map.ts').replace("'./portfolio'", JSON.stringify(portfolioUrl));
-const { clearingCamera, focusCamera, fitCamera, zoomAt, movePoint, works, arrangements, connections, WORLD, ZOOM } = await import(moduleUrl(mapCode));
+const { viewpointCamera, travelCamera, connectionsCamera, clearingCamera, focusCamera, fitCamera, zoomAt, movePoint, works, arrangements, connections, WORLD, ZOOM } = await import(moduleUrl(mapCode));
 const near = (actual, expected) => assert.ok(Math.abs(actual - expected) < 1e-8, `${actual} != ${expected}`);
 // Zooming keeps the world point under the pointer fixed, even at the bounds.
 for (const initial of [{ x: -320, y: 110, zoom: .6 }, { x: 20, y: -45, zoom: 1.3 }]) {
@@ -60,3 +60,23 @@ for (const size of [{ width: 375, height: 535 }, { width: 1440, height: 680 }, {
   }
 }
 console.log('Immersive entrance and selected-work visibility verified at mobile and desktop sizes.');
+
+// Camera travel must end exactly at the selected view and interpolate without scale jumps.
+for (const size of [{ width: 375, height: 570 }, { width: 1440, height: 740 }]) {
+ const shots = ['overlook','walk','close'].map(name => viewpointCamera(size,name));
+ assert.ok(shots[0].zoom < shots[1].zoom && shots[1].zoom < shots[2].zoom);
+ for(const [from,to] of [[shots[0],shots[2]],[shots[2],shots[0]]]) {
+  for(const [t,expected] of [[0,from],[1,to]]) {const actual=travelCamera(from,to,size,t);for(const key of ['x','y','zoom'])near(actual[key],expected[key]);}
+  let previous=from.zoom;
+  for(let i=1;i<=100;i++) {const camera=travelCamera(from,to,size,i/100);assert.ok(Number.isFinite(camera.x)&&Number.isFinite(camera.y));assert.ok(camera.zoom>=ZOOM.min&&camera.zoom<=ZOOM.max);assert.ok(to.zoom>from.zoom?camera.zoom>=previous:camera.zoom<=previous);previous=camera.zoom;}
+ }
+ const network=connectionsCamera(size);assert.ok(network.zoom>=.45);
+}
+const researchUrl=moduleUrl(compile('../lib/research.ts').replace("'./portfolio'",JSON.stringify(portfolioUrl)));
+const {landSettings,paperFigures}=await import(researchUrl);
+near(landSettings.reduce((n,s)=>n+s.fire,0),100);
+near(landSettings.reduce((n,s)=>n+s.research,0),100);
+near(landSettings[1].fire,28.7);near(landSettings[1].research,.9);
+assert.deepEqual(paperFigures.map(f=>f.number),[1,2,3,4,5,6,7,8,9,10]);
+for(const f of paperFigures)assert.ok(f.page>=1&&f.page<=26);
+console.log('Near/far travel endpoints, monotonic zoom, readable network scale, and published research shares verified.');

@@ -6,7 +6,7 @@ export type Point = { x: number; y: number };
 export type Camera = Point & { zoom: number };
 export type Size = { width: number; height: number };
 export const WORLD = { width: 1500, height: 1000 };
-export const ZOOM = { min: .25, max: 2.2 };
+export const ZOOM = { min: .18, max: 6 };
 export const works = [
   { id: 'wildfire', number: 'R1', title: 'Wildfire as urban risk', category: 'Published research', question: 'How does wildfire risk travel through urban systems?', image: 'research', cover: 0 },
   { id: 'defensible', number: 'R2', title: 'Where the Fire Stopped', category: 'Research in progress', question: 'What can post-fire evidence tell us about landscape design?', image: 'defensible', cover: 0 },
@@ -21,11 +21,11 @@ export const arrangements: Record<Arrangement, Record<WorkId, Point>> = {
     'back-to-homeland': { x: 760, y: 870 }, 'homeland-drawings': { x: 260, y: 800 },
   },
   connections: {
-    wildfire: { x: 230, y: 225 }, defensible: { x: 550, y: 265 },
-    'natural-as-calendar': { x: 1090, y: 145 }, 'ycd2050': { x: 850, y: 555 },
-    'living-with-water': { x: 1220, y: 410 }, 'bride-market': { x: 1080, y: 805 },
-    'sediment-harvester': { x: 1300, y: 670 }, 'ant-scape': { x: 825, y: 315 },
-    'back-to-homeland': { x: 440, y: 730 }, 'homeland-drawings': { x: 170, y: 560 },
+    wildfire: { x: 495, y: 290 }, defensible: { x: 890, y: 455 },
+    'natural-as-calendar': { x: 865, y: 120 }, 'ycd2050': { x: 1170, y: 230 },
+    'living-with-water': { x: 1270, y: 465 }, 'bride-market': { x: 265, y: 485 },
+    'sediment-harvester': { x: 1270, y: 770 }, 'ant-scape': { x: 920, y: 785 },
+    'back-to-homeland': { x: 570, y: 735 }, 'homeland-drawings': { x: 230, y: 800 },
   },
 };
 export const connections: Array<{ from: WorkId; to: WorkId; label: string }> = [
@@ -51,7 +51,7 @@ export function clearingCamera(size: Size): Camera {
   return { x: size.width / 2 - 750 * zoom, y: size.height * .48 - 440 * zoom, zoom };
 }
 export function focusCamera(size: Size, point: Point, arrangement: Arrangement): Camera {
-  const zoom = arrangement === 'clearing' ? Math.min(1.9, clearingCamera(size).zoom * 1.55) : .92;
+  const zoom = arrangement === 'clearing' ? Math.min(3.6, clearingCamera(size).zoom * 2.2) : .88;
   return { x: size.width * (size.width < 600 ? .5 : .55) - point.x * zoom, y: size.height * .32 - point.y * zoom, zoom };
 }
 export function zoomAt(camera: Camera, zoom: number, anchor: Point): Camera {
@@ -61,4 +61,33 @@ export function zoomAt(camera: Camera, zoom: number, anchor: Point): Camera {
 }
 export function movePoint(point: Point, delta: Point, zoom: number): Point {
   return { x: Math.max(80, Math.min(WORLD.width - 80, point.x + delta.x / zoom)), y: Math.max(80, Math.min(WORLD.height - 80, point.y + delta.y / zoom)) };
+}
+
+export function viewpointCamera(size: Size, viewpoint: 'overlook' | 'walk' | 'close'): Camera {
+  if (viewpoint === 'overlook') return fitCamera(size);
+  const zoom = Math.min(ZOOM.max, clearingCamera(size).zoom * (viewpoint === 'walk' ? 1.35 : 2.8));
+  const point = viewpoint === 'walk' ? { x: 650, y: 410 } : { x: 510, y: 625 };
+  return { x: size.width / 2 - point.x * zoom, y: size.height * .48 - point.y * zoom, zoom };
+}
+// Interpolate world-space focus and logarithmic scale for continuous camera travel.
+export function travelCamera(from: Camera, to: Camera, size: Size, progress: number): Camera {
+  const t = Math.max(0, Math.min(1, progress));
+  const ease = t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const center = { x: size.width / 2, y: size.height / 2 };
+  const start = { x: (center.x - from.x) / from.zoom, y: (center.y - from.y) / from.zoom };
+  const end = { x: (center.x - to.x) / to.zoom, y: (center.y - to.y) / to.zoom };
+  const zoom = Math.exp(Math.log(from.zoom) + (Math.log(to.zoom) - Math.log(from.zoom)) * ease);
+  return { x: center.x - (start.x + (end.x - start.x) * ease) * zoom, y: center.y - (start.y + (end.y - start.y) * ease) * zoom, zoom };
+}
+export function connectionCurve(from: Point, to: Point, bend = 1): string {
+  const dx = to.x - from.x, dy = to.y - from.y;
+  const length = Math.hypot(dx, dy) || 1;
+  const bow = Math.min(100, length * .16) * bend;
+  const ox = -dy / length * bow, oy = dx / length * bow;
+  return `M ${from.x} ${from.y} C ${from.x + dx * .3 + ox} ${from.y + dy * .3 + oy}, ${from.x + dx * .7 + ox} ${from.y + dy * .7 + oy}, ${to.x} ${to.y}`;
+}
+export function connectionsCamera(size: Size): Camera {
+  const fit = fitCamera(size);
+  if (fit.zoom >= .45) return fit;
+  return { x: size.width / 2 - 700 * .45, y: size.height / 2 - 450 * .45, zoom: .45 };
 }
