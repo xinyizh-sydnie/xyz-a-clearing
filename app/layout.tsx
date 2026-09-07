@@ -6,5 +6,6 @@ export const metadata: Metadata = {
   icons: { icon: './favicon.svg' },
 };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body>{children}</body></html>;
+  const base = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  return <html lang="en"><head><style>{`@font-face{font-family:Manrope;src:url('${base}/fonts/Manrope.ttf') format('truetype');font-weight:200 800;font-style:normal;font-display:swap}`}</style></head><body>{children}</body></html>;
 }
