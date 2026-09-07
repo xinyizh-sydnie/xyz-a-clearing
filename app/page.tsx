@@ -6,7 +6,7 @@ import { Sheet, SheetContent, SheetTitle, SheetDescription } from '@/components/
 import { Button } from '@/components/ui/button';
 import { PortfolioIndex, PortfolioReader } from '@/components/clearing/portfolio';
 import { ResearchSection, ResearchReader } from '@/components/clearing/research';
-import { ClearingExplorer } from '@/components/clearing/explorer';
+import { SceneJourney } from '@/components/clearing/journey';
 import { portfolio, type PortfolioId } from '@/lib/portfolio';
 
 type View = 'explore' | 'academic';
@@ -68,8 +68,8 @@ export default function Home() {
     <main id="main-content">
       <TabsContent value="explore" className="explore-view">
         <section className="clearing-section" aria-label="Explore Sydnie Zhang's work">
-          <div className="clearing-introduction"><h1>Sydnie Zhang</h1><div><p>Landscape architect and<br/>climate hazard researcher.</p><span className="eyebrow">PhD student / UC Berkeley</span></div></div>
-          <ClearingExplorer onOpen={open} visited={visited}/>
+          <div className="clearing-introduction"><h1 className="display-heading">Sydnie Zhang</h1><div><p>Landscape architect and<br/>climate hazard researcher.</p><span className="eyebrow">PhD student / UC Berkeley</span></div></div>
+          <SceneJourney onOpen={open} visited={visited}/>
           <div className="clearing-after"><span>37.87° N / 122.26° W — Berkeley, California</span><a href="#portfolio">Portfolio <ArrowRight size={15}/></a></div>
         </section>
         <ResearchSection onOpen={open} onAcademic={()=>changeView('academic')}/>

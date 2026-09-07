@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import ts from 'typescript';
 const moduleUrl = source => `data:text/javascript;base64,${Buffer.from(source).toString('base64')}`;
 const compile = path => ts.transpileModule(readFileSync(new URL(path, import.meta.url), 'utf8'), { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText;
@@ -80,3 +80,47 @@ near(landSettings[1].fire,28.7);near(landSettings[1].research,.9);
 assert.deepEqual(paperFigures.map(f=>f.number),[1,2,3,4,5,6,7,8,9,10]);
 for(const f of paperFigures)assert.ok(f.page>=1&&f.page<=26);
 console.log('Near/far travel endpoints, monotonic zoom, readable network scale, and published research shares verified.');
+
+const journeyModule=await import(moduleUrl(compile('../lib/journey.ts').replace("'./portfolio'",JSON.stringify(portfolioUrl))));
+const {journey,journeyFrame,clearingViews,wrapBearing,boundJourneyCamera,scenePoint}=journeyModule;
+assert.equal(journey[0].work,'wildfire');
+assert.equal(journey.at(-1).id,'clearing');
+assert.deepEqual(new Set(journey.map(scene=>scene.work)),ids);
+assert.equal(new Set(journey.map(scene=>scene.image)).size,10);
+// Native scroll can overshoot either end without losing a valid scene.
+for(const position of [-100,0,.61,.81,.999,1,4.7,8.999,9,100]) {
+ const frame=journeyFrame(position);
+ assert.ok(journey[frame.index]&&journey[frame.next]);
+ assert.ok(frame.blend>=0&&frame.blend<=1);
+ assert.equal(frame.arrived,position>=8.999);
+}
+for(let index=1;index<journey.length;index++) {
+ const before=journeyFrame(index-.000001),after=journeyFrame(index);
+ assert.equal(before.next,after.index);assert.ok(before.blend>.999);
+}
+// Repeated left/right turns remain on the ring and return to the same view.
+for(let bearing=-100;bearing<100;bearing++) {
+ assert.ok(journey[clearingViews[wrapBearing(bearing)]]);
+ assert.equal(wrapBearing(bearing),wrapBearing(bearing+clearingViews.length));
+ assert.equal(wrapBearing(wrapBearing(bearing)+1-1),wrapBearing(bearing));
+}
+// Pan and zoom must never reveal an empty edge, including after zooming out.
+for(const size of [{width:375,height:510},{width:1440,height:560},{width:820,height:820}]) {
+ for(const zoom of [.5,1,1.5,2,3,9])for(const x of [-9000,0,9000])for(const y of [-9000,0,9000]) {
+  const camera=boundJourneyCamera({zoom,x,y},size);
+  const left=(1-camera.zoom)*size.width*.5+camera.x;
+  const top=(1-camera.zoom)*size.height*.6+camera.y;
+  assert.ok(left<=1e-8&&left+size.width*camera.zoom>=size.width-1e-8);
+  assert.ok(top<=1e-8&&top+size.height*camera.zoom>=size.height-1e-8);
+  const reset=boundJourneyCamera({...camera,zoom:1},size);
+  near(reset.x,0);near(reset.y,0);
+ }
+ for(const scene of journey){const point=scenePoint(scene,size);assert.ok(Number.isFinite(point.x)&&Number.isFinite(point.y));}
+}
+console.log('All ten journey destinations, continuous scene boundaries, circular views, and gap-free pan/zoom verified.');
+
+for(const scene of journey) {
+ const file = new URL('../public/images/journey/'+scene.image,import.meta.url);
+ assert.ok(existsSync(file),`Missing scene: ${scene.id}`);
+}
+console.log('Every scene asset is present.');
