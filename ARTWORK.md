@@ -36,4 +36,8 @@ Companion text uses the open-source Jost variable font, from the official Google
 
 ## Shared clearing overview
 
-A single new Imagegen composition connects the individual project scenes into a shared central clearing, visible at both the beginning and end of the walk. Continuous paths and water link a distant fire ridge, house garden, seasonal creek, campus commons, floating planted beds, market arcades, sediment edge, reconstructed garden lane, a drawing table, and the ant trail. Five existing scene illustrations were supplied as reference images. This is an interpretive landscape, not a claim that the separate projects occupy one actual geographical site. The original generated PNG was converted to `public/images/journey/clearing-hub.webp`. No variants or retries were generated.
+A single new Imagegen composition connects the individual project scenes into a shared central clearing, visible at both the beginning and end of the walk. Continuous paths and water link a distant fire ridge, house garden, seasonal creek, campus commons, floating planted beds, market arcades, sediment edge, reconstructed garden lane, a drawing table, and the ant trail. Five existing scene illustrations were supplied as reference images. This is an interpretive landscape, not a claim that the separate projects occupy one actual geographical site. The original generated PNG was converted to `public/data/exploration/scenes/clearing-hub.webp`. No variants or retries were generated.
+
+## Repository data layout
+
+Media are grouped by purpose under `public/data/exploration/`, `public/data/portfolio/`, and `public/data/research/`. Source text, metadata and spatial links are under `data/`. `data/assets.json` indexes all media files with byte lengths and SHA-256 checksums. The directory migration preserves the supplied image and PDF bytes.

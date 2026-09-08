@@ -1,0 +1,595 @@
+{
+  "publicRoot": "public/data",
+  "files": [
+    {
+      "path": "exploration/ant-scape/algorithm.webp",
+      "bytes": 130798,
+      "sha256": "8069317eb3021995569b4fa10ef061fc646eee5b302352bb52b1688a651d58fc"
+    },
+    {
+      "path": "exploration/ant-scape/city.webp",
+      "bytes": 944890,
+      "sha256": "00cf2ed3de2fd75f872baf171dafc256ff70325f6c54981e18654bebfbe67b6f"
+    },
+    {
+      "path": "exploration/ant-scape/ground.png",
+      "bytes": 1957899,
+      "sha256": "3f781519533066fbae9075dde0bdc23aec9426005ba958a7ed2621b294fdbcca"
+    },
+    {
+      "path": "exploration/scenes/city.webp",
+      "bytes": 726426,
+      "sha256": "4f3bf323b51cd1f163c4cdd89aefce46049a379d9606876b8706d6b012586e52"
+    },
+    {
+      "path": "exploration/scenes/clearing-hub.webp",
+      "bytes": 756756,
+      "sha256": "cb27c7195ac03b9d4dfa278862fcea996aaab20447197de837682df58799b6ce"
+    },
+    {
+      "path": "exploration/scenes/clearing.png",
+      "bytes": 3757655,
+      "sha256": "b70ac7928e5ff9b00dfb2da749cf70cefdbd6e668bace0a9300e67e3f1540fb7"
+    },
+    {
+      "path": "exploration/scenes/fire.webp",
+      "bytes": 695846,
+      "sha256": "c2b8951e94360c7d6f5789c5d48a5104149a58cdde0fd21ea3cdee761bb7e977"
+    },
+    {
+      "path": "exploration/scenes/home.webp",
+      "bytes": 693622,
+      "sha256": "cf59f1298cdebc15a367833d2797861eb9132c2d4efc5fd7a632110f49893a2f"
+    },
+    {
+      "path": "exploration/scenes/homeland.webp",
+      "bytes": 693870,
+      "sha256": "9a5764a80aa2aa24a59499fbb5e0e56b0bc9a6972b1c84e8c4ab9b173835e2fe"
+    },
+    {
+      "path": "exploration/scenes/market.webp",
+      "bytes": 714718,
+      "sha256": "e079992435b0a7fab52defcd6808b5d4e989aa77740e924d90aa6bf2d3026d2b"
+    },
+    {
+      "path": "exploration/scenes/seasons.webp",
+      "bytes": 811782,
+      "sha256": "d469c99cf517655daf978153b73dc3e234a3fd323aa9ef980f14f52ff8eaf55f"
+    },
+    {
+      "path": "exploration/scenes/shore.webp",
+      "bytes": 581152,
+      "sha256": "ca888d50c3eed2c65abfab123b7532dafe03de84734783c96d0716610eccd431"
+    },
+    {
+      "path": "exploration/scenes/water.webp",
+      "bytes": 585836,
+      "sha256": "e19cb7479a9a11d9477e5c35b8d5d697168b5a4ff1ef17b8833563d58162ea99"
+    },
+    {
+      "path": "portfolio/covers/homeland.jpg",
+      "bytes": 201498,
+      "sha256": "877b4ad9b9eda974e3f11983242816db68fa217cbeb043bd30229e3fc68bdcfd"
+    },
+    {
+      "path": "portfolio/covers/landscape-language.jpg",
+      "bytes": 238155,
+      "sha256": "4ed2e47f60a4a395d788f86490ff46b0c0b4bb9c2783ef11242836cab09f7739"
+    },
+    {
+      "path": "portfolio/covers/living-with-water.jpg",
+      "bytes": 323240,
+      "sha256": "b19706fd3a3ba99c539444027672b8987e34e15803a7c32f44f445298f659cb3"
+    },
+    {
+      "path": "portfolio/pages/page-01.jpg",
+      "bytes": 553657,
+      "sha256": "4345da224d2e036dc447af7792f470a8a86ccce0f0066414ed221737ca4499f5"
+    },
+    {
+      "path": "portfolio/pages/page-02.jpg",
+      "bytes": 220977,
+      "sha256": "3001e0cd3ea8e71470ee397e874eac67174e78871d6d6e1d3ce1ddde1c6d6d05"
+    },
+    {
+      "path": "portfolio/pages/page-03.jpg",
+      "bytes": 326235,
+      "sha256": "f48a149e8f31cba8c121224dfe28b5062fa451aa0d379b2abb91e938b08621b7"
+    },
+    {
+      "path": "portfolio/pages/page-04.jpg",
+      "bytes": 641817,
+      "sha256": "0749ef8f784988a74e981e723a91398e684fb08af5fc038de54f84592118c623"
+    },
+    {
+      "path": "portfolio/pages/page-05.jpg",
+      "bytes": 597003,
+      "sha256": "3901c36e5ed0c3bb99711f4bb591db76604255b620ca30ec604f286dc17d04bd"
+    },
+    {
+      "path": "portfolio/pages/page-06.jpg",
+      "bytes": 832436,
+      "sha256": "10495e5fe38140f94e94d81c11e9de9fb3b2cb2723b4334066ffbd5341354353"
+    },
+    {
+      "path": "portfolio/pages/page-07.jpg",
+      "bytes": 365099,
+      "sha256": "8fbc424eb5cad5214846db7194079f42dfe936d54514a5a908d405fe43250d60"
+    },
+    {
+      "path": "portfolio/pages/page-08.jpg",
+      "bytes": 568712,
+      "sha256": "8d057d82b9df4201a469d5488a5c225f66fa9e4c2665c2d0dd168c463a17cf9b"
+    },
+    {
+      "path": "portfolio/pages/page-09.jpg",
+      "bytes": 581609,
+      "sha256": "0787eb2355f07a5879d047e24b77f4799b5c25e2c1230c22c38dce993a94a0a9"
+    },
+    {
+      "path": "portfolio/pages/page-10.jpg",
+      "bytes": 349163,
+      "sha256": "ba8450be1d340cfb10cd440032afc7b75c9c219ca95f0e835fd08ccf2dfdba78"
+    },
+    {
+      "path": "portfolio/pages/page-11.jpg",
+      "bytes": 513711,
+      "sha256": "71addbb9707d61707436b25c0bf5e3b19823813fc0e9b4ca37a064ae4142e7fc"
+    },
+    {
+      "path": "portfolio/pages/page-12.jpg",
+      "bytes": 775893,
+      "sha256": "d726596e90a7442118a57af3443c8bd3912525633832e13d3153e25377aaaf7d"
+    },
+    {
+      "path": "portfolio/pages/page-13.jpg",
+      "bytes": 546612,
+      "sha256": "dd80adc4af93771fea0317564ada46a97208e10000408fb2dc16609ddd3c07e0"
+    },
+    {
+      "path": "portfolio/pages/page-14.jpg",
+      "bytes": 571667,
+      "sha256": "99f48810ba497934662295245f3893b713b8aec7896c95167971612b6769b57d"
+    },
+    {
+      "path": "portfolio/pages/page-15.jpg",
+      "bytes": 270931,
+      "sha256": "9ac82715b3b9f2cfc3562ac234465f0b0bca0596314ebad7f482824881a1764d"
+    },
+    {
+      "path": "portfolio/pages/page-16.jpg",
+      "bytes": 702034,
+      "sha256": "9bc2654054d2a850a7f71c1fd6448845f1df2d78cc6c514d32f29b9a2bd007da"
+    },
+    {
+      "path": "portfolio/pages/page-17.jpg",
+      "bytes": 458158,
+      "sha256": "134afa02bb2749610dae09e5f0b669071780eae24bbe64e642cf5351812ee3b2"
+    },
+    {
+      "path": "portfolio/pages/page-18.jpg",
+      "bytes": 748279,
+      "sha256": "28c2fa3195b524842ae38e96683d5b28eb035d4afba1a3471629fd12d3aba4b4"
+    },
+    {
+      "path": "portfolio/pages/page-19.jpg",
+      "bytes": 744070,
+      "sha256": "14573ee3fed739e0da96cbc39840026d1658851443924a785fc45d164e2d8be7"
+    },
+    {
+      "path": "portfolio/pages/page-20.jpg",
+      "bytes": 391210,
+      "sha256": "ba72757c3301bcda22bbdacdb9d4ece8bf27b5c209355c94ab105a1a23df8724"
+    },
+    {
+      "path": "portfolio/pages/page-21.jpg",
+      "bytes": 680514,
+      "sha256": "870adf8bafa269d52eb36997b6b59c6507ac2d453d1c81f5fbffae797d1b5384"
+    },
+    {
+      "path": "portfolio/pages/page-22.jpg",
+      "bytes": 350074,
+      "sha256": "107df06d31ab7d692178c10fa14c7be66a1ac65e0803233c61c84f0a078c994b"
+    },
+    {
+      "path": "portfolio/pages/page-23.jpg",
+      "bytes": 863377,
+      "sha256": "9bbf0a8558a62b6d70de9b34160dae1b6442c7c7d405fe74e929f40ffec1dcf8"
+    },
+    {
+      "path": "portfolio/pages/page-24.jpg",
+      "bytes": 956366,
+      "sha256": "77c7697e9e9ff61c85fddfcf41922305215a8559f622e8906c05ec4128a3a093"
+    },
+    {
+      "path": "portfolio/pages/page-25.jpg",
+      "bytes": 578169,
+      "sha256": "fc71e00b3934665f80c1a6a4832921ba1b036485eb5590eb9dff4d7e4de7d907"
+    },
+    {
+      "path": "portfolio/pages/page-26.jpg",
+      "bytes": 308471,
+      "sha256": "4962e5d10e54221a08382582e2d863f598cb41643dbe1ea1e8ac028875b8a26e"
+    },
+    {
+      "path": "portfolio/pages/page-27.jpg",
+      "bytes": 471412,
+      "sha256": "18f6502f213813a83a075446c807e2100ae1e8f491419df5b8eafa837d077da9"
+    },
+    {
+      "path": "portfolio/pages/page-28.jpg",
+      "bytes": 623120,
+      "sha256": "62fc4d125f4875dcdedc48c213fbde980aa78c0895d724d1779e8373b785ab21"
+    },
+    {
+      "path": "portfolio/pages/page-29.jpg",
+      "bytes": 568941,
+      "sha256": "3fca01b8ac27988fc493d2715a4739345f8a84546801e2ae926d0b40b86e9bec"
+    },
+    {
+      "path": "portfolio/pages/page-30.jpg",
+      "bytes": 219457,
+      "sha256": "ac1c662501f56f25094ee5e4cbf5c89877b46e0368f62f8ecd910f6f3d9fe739"
+    },
+    {
+      "path": "portfolio/pages/page-31.jpg",
+      "bytes": 364316,
+      "sha256": "d5881fa4a4f3768ea8ca037c9d9f08938659db64aa575347aa4e73e5c17e6073"
+    },
+    {
+      "path": "portfolio/pages/page-32.jpg",
+      "bytes": 533584,
+      "sha256": "097a61fc847b981e8abb29fd8e589daae6f84b85169b7a9e4927fb57e9709682"
+    },
+    {
+      "path": "portfolio/pages/page-33.jpg",
+      "bytes": 577040,
+      "sha256": "640409819ce45d36e11e62e3c48fad1413e87b1d2d6f043cd5afed9498193f43"
+    },
+    {
+      "path": "portfolio/pages/page-34.jpg",
+      "bytes": 809094,
+      "sha256": "235b5315c41c81c28cbad17080c27c66f1bad3532c427408501d9e51f1aa6271"
+    },
+    {
+      "path": "portfolio/pages/page-35.jpg",
+      "bytes": 421298,
+      "sha256": "432327f552afc0176f2cdea304a1a88d7b1d30da78882c662d2d805b580490c7"
+    },
+    {
+      "path": "portfolio/pages/page-36.jpg",
+      "bytes": 265017,
+      "sha256": "52fa9d9b65ccd09b912646d6e6245d343bb740e681c3e4971acf2a688e29ce1f"
+    },
+    {
+      "path": "portfolio/pages/page-37.jpg",
+      "bytes": 695804,
+      "sha256": "56bdb840d6333aa8d99f8da5d0c21816ddbef0463539f21e71d1aefe930b6a3d"
+    },
+    {
+      "path": "portfolio/pages/page-38.jpg",
+      "bytes": 504292,
+      "sha256": "ed99fc4e87f577406f69a7e95dfb4b82283eb176a4c9b13b5806adc10209f576"
+    },
+    {
+      "path": "portfolio/pages/page-39.jpg",
+      "bytes": 597656,
+      "sha256": "c4a151f3769071aba5eb5eb3696f98bd6f07252dc143770504398a6f212ebb85"
+    },
+    {
+      "path": "portfolio/pages/page-40.jpg",
+      "bytes": 630436,
+      "sha256": "51a2c6396ad58dc0abb1b7bf8fdc944084bf593b1fd9596d5b4fbbbd67f752e9"
+    },
+    {
+      "path": "portfolio/pages/page-41.jpg",
+      "bytes": 541233,
+      "sha256": "4ba324523be8ef71af95f4d7fb832eab6f1992d7b650c3f024b148292764d011"
+    },
+    {
+      "path": "portfolio/pages/page-42.jpg",
+      "bytes": 522145,
+      "sha256": "f236b414c8b63508439f499218a3d0d9817d552ddf8c1b553ae7f6ab5526746f"
+    },
+    {
+      "path": "portfolio/pages/page-43.jpg",
+      "bytes": 543088,
+      "sha256": "d93a8a034a3d7e55f1a2a7841692f5437264aec412e0e803f50680e41c27ba2b"
+    },
+    {
+      "path": "portfolio/pages/page-44.jpg",
+      "bytes": 354708,
+      "sha256": "fc069b13f305d29400d960eff855dbf054c64d7bbb4ecd62a10760110629c655"
+    },
+    {
+      "path": "portfolio/pages/page-45.jpg",
+      "bytes": 526672,
+      "sha256": "e83b363917973bb07ac89bff9d869a726b1576e90df7aec8039a2bf1fd297df6"
+    },
+    {
+      "path": "portfolio/thumbnails/page-01.webp",
+      "bytes": 16582,
+      "sha256": "1b87d9209357a4bf153c5a37f390e39ef039c226f75723c076e8bc17767ab9c9"
+    },
+    {
+      "path": "portfolio/thumbnails/page-02.webp",
+      "bytes": 20702,
+      "sha256": "ed447269514a1b5eaf4aaba7d193f34da5f851ce9f7e0ecd88d3b6a9d57fd99f"
+    },
+    {
+      "path": "portfolio/thumbnails/page-03.webp",
+      "bytes": 34558,
+      "sha256": "49483d5c425b18ba55640d9bb2f083b6bf2ff8073bdbed424571e2ed4cec367a"
+    },
+    {
+      "path": "portfolio/thumbnails/page-04.webp",
+      "bytes": 75686,
+      "sha256": "4065800d33da400540bbbeba1c48861b2b9443abc808534051108a5dc4852f59"
+    },
+    {
+      "path": "portfolio/thumbnails/page-05.webp",
+      "bytes": 76878,
+      "sha256": "f7f1deb7cb8bf0608fcdf96562e75d291ae9241a624a114e698fe87d3af12fd1"
+    },
+    {
+      "path": "portfolio/thumbnails/page-06.webp",
+      "bytes": 110936,
+      "sha256": "2e7c97751dc585b217c99fcb2a73d59b43f6781c797064aabb6de196ec4c82a8"
+    },
+    {
+      "path": "portfolio/thumbnails/page-07.webp",
+      "bytes": 42598,
+      "sha256": "2e428cd13f7376c97a833002799d68bc053a5b6bd7b05a1ef5ac035af3ebc787"
+    },
+    {
+      "path": "portfolio/thumbnails/page-08.webp",
+      "bytes": 67168,
+      "sha256": "3896f0ea897a0954a3ab108eb7807ac481fb85038d665d25c7a990b5a2bcaba6"
+    },
+    {
+      "path": "portfolio/thumbnails/page-09.webp",
+      "bytes": 66130,
+      "sha256": "397f891da022e392fa55ea8c26e416e156d932a37d5dea578bd726246a07e8c8"
+    },
+    {
+      "path": "portfolio/thumbnails/page-10.webp",
+      "bytes": 36362,
+      "sha256": "5cba0f5c49875a28a4bb56c528267a36b0f454ad1615e40eb8c24569050956a3"
+    },
+    {
+      "path": "portfolio/thumbnails/page-11.webp",
+      "bytes": 60310,
+      "sha256": "0f1e55048d872429dd7edd121895014c9ed5a6616d6289625355b0620391ae99"
+    },
+    {
+      "path": "portfolio/thumbnails/page-12.webp",
+      "bytes": 91682,
+      "sha256": "ac800145e2f086395e400ca2895fb4e4cb3ac1e18e56bde7c1da2bbeb953913c"
+    },
+    {
+      "path": "portfolio/thumbnails/page-13.webp",
+      "bytes": 69134,
+      "sha256": "2f28a905bba369b756d9d0b77ae8366d622367968c73bb9f38742119a0d96b03"
+    },
+    {
+      "path": "portfolio/thumbnails/page-14.webp",
+      "bytes": 71386,
+      "sha256": "a04a9f15a1e4746901727001121252f4e7df63d2b5d28232e602a6009368b4cb"
+    },
+    {
+      "path": "portfolio/thumbnails/page-15.webp",
+      "bytes": 25682,
+      "sha256": "9af7da5720bc739665db7aa0ebbd342d37c9b01e23f510cc4679bf0a37e6ad6b"
+    },
+    {
+      "path": "portfolio/thumbnails/page-16.webp",
+      "bytes": 75056,
+      "sha256": "55f2c9700bea829e26aaeb027701a9a2113a8034c9b5c0cf79a1c6dc5fe38e29"
+    },
+    {
+      "path": "portfolio/thumbnails/page-17.webp",
+      "bytes": 48208,
+      "sha256": "06e7cd20b6dca8a5c110e46f23acb255f750e3d2ece2bfdbe531fd2dfe55fefe"
+    },
+    {
+      "path": "portfolio/thumbnails/page-18.webp",
+      "bytes": 93094,
+      "sha256": "b0f7e30f61bc7a96cd111ca33f134b647e0c138516f23b2c1f2b18f9e386c4bd"
+    },
+    {
+      "path": "portfolio/thumbnails/page-19.webp",
+      "bytes": 79168,
+      "sha256": "0ab79f20406307d78584d85e282c7d967339296eb21328771fe578a21411fde7"
+    },
+    {
+      "path": "portfolio/thumbnails/page-20.webp",
+      "bytes": 35930,
+      "sha256": "1552fed9caba1384e3599c12d0dd60cbdaf634f0fcbb569bba40dd8037141732"
+    },
+    {
+      "path": "portfolio/thumbnails/page-21.webp",
+      "bytes": 71170,
+      "sha256": "3370598fdec61235c29dc94e5f5227b807a44bb01c809b4adf693201de859dc2"
+    },
+    {
+      "path": "portfolio/thumbnails/page-22.webp",
+      "bytes": 35644,
+      "sha256": "8786a837dbc14a94fecfce3d0763eb9875e45c1140d9fc521f9e04a564da2ed0"
+    },
+    {
+      "path": "portfolio/thumbnails/page-23.webp",
+      "bytes": 104906,
+      "sha256": "8c49ed9f49cd0957365d1d2252960aa3656e210a5129c8d5467f4f91a81fc9b7"
+    },
+    {
+      "path": "portfolio/thumbnails/page-24.webp",
+      "bytes": 99264,
+      "sha256": "a4fad4b19b2ffed9d611eddb007c6d0e80497190554f2520403ca01787a9f042"
+    },
+    {
+      "path": "portfolio/thumbnails/page-25.webp",
+      "bytes": 65292,
+      "sha256": "edc6a78174032fc3fb2113bfacd1b0306cdccc81b8a8958a962cbc303d3903f6"
+    },
+    {
+      "path": "portfolio/thumbnails/page-26.webp",
+      "bytes": 32034,
+      "sha256": "86acb01fb482c8da414f048e600368d1d5b3b6bddd11c8373bc6c5e8c98acc5c"
+    },
+    {
+      "path": "portfolio/thumbnails/page-27.webp",
+      "bytes": 53098,
+      "sha256": "d994eb5645b02c1dd07d3abd1c485ac85e1aeba9c47a53f07d292f07a30ebd73"
+    },
+    {
+      "path": "portfolio/thumbnails/page-28.webp",
+      "bytes": 72114,
+      "sha256": "bd70a572827640aeb146ebb7e77f5d912bb81c2ba589bd973d843a54dcbb7e35"
+    },
+    {
+      "path": "portfolio/thumbnails/page-29.webp",
+      "bytes": 65738,
+      "sha256": "eead1443be5cdfdd66c8148878bb2dfdd6535c31c9580542bfb212669e60358a"
+    },
+    {
+      "path": "portfolio/thumbnails/page-30.webp",
+      "bytes": 20856,
+      "sha256": "a9afead97ccee1e4e45d1719f0784cad23cf75dd57180eef2297d8aa3d187555"
+    },
+    {
+      "path": "portfolio/thumbnails/page-31.webp",
+      "bytes": 37272,
+      "sha256": "921ec25a47b992c11e20de6c4688ed47bf778e55d7ea45523b778caadfa42362"
+    },
+    {
+      "path": "portfolio/thumbnails/page-32.webp",
+      "bytes": 59198,
+      "sha256": "886ad8603d10c7a2d9c3930312417cf1f9cd8ec7c63d5e1ac4464f915e79db15"
+    },
+    {
+      "path": "portfolio/thumbnails/page-33.webp",
+      "bytes": 67454,
+      "sha256": "d2be5a4130642f54036c408446d71dcae3f3969c57c0b62d543450f7ab263158"
+    },
+    {
+      "path": "portfolio/thumbnails/page-34.webp",
+      "bytes": 98952,
+      "sha256": "b023c7e424d34ebf5ae65d43a6f482b2eefd38a23925e3b60c8a91d00bf8a091"
+    },
+    {
+      "path": "portfolio/thumbnails/page-35.webp",
+      "bytes": 45434,
+      "sha256": "10daf9670a3e8a0b13c6d90458b397648571f0ecb77dee6f322dc2ae3129b36f"
+    },
+    {
+      "path": "portfolio/thumbnails/page-36.webp",
+      "bytes": 26648,
+      "sha256": "42fc395271e74117e4235c4af2763c789d16cb5738a6fa96c052488819ada6b2"
+    },
+    {
+      "path": "portfolio/thumbnails/page-37.webp",
+      "bytes": 73262,
+      "sha256": "9791aefb12f57ea119e5a7daf420dff98a1f8318fcd0c3389c1634fc5da84700"
+    },
+    {
+      "path": "portfolio/thumbnails/page-38.webp",
+      "bytes": 51438,
+      "sha256": "e9b79156981ab72e2f75e753d22b4a2a01e7c29c876d7ddf6344bfb49abc6951"
+    },
+    {
+      "path": "portfolio/thumbnails/page-39.webp",
+      "bytes": 64666,
+      "sha256": "1adc5b16c91c5a69019d5a14646d873afc2a0c72de60815dcf35140b11fa3042"
+    },
+    {
+      "path": "portfolio/thumbnails/page-40.webp",
+      "bytes": 70414,
+      "sha256": "e8d43b86c711d293bfc68e678009bc8c107f3dc06bfbff4844a3ea515feea4b1"
+    },
+    {
+      "path": "portfolio/thumbnails/page-41.webp",
+      "bytes": 59770,
+      "sha256": "75b983d803bdf468cdc016332e4950c49ec42bd508e1f17cd40190c2507f85b2"
+    },
+    {
+      "path": "portfolio/thumbnails/page-42.webp",
+      "bytes": 57282,
+      "sha256": "174cafb03756bedcfd383e5bcc83251677be35bed21a1534bfa60dc10d2a4368"
+    },
+    {
+      "path": "portfolio/thumbnails/page-43.webp",
+      "bytes": 61638,
+      "sha256": "3b161ab888ff4adf7974441fb70ffd49025c764eac920c48472de2617d71879a"
+    },
+    {
+      "path": "portfolio/thumbnails/page-44.webp",
+      "bytes": 38100,
+      "sha256": "fc7d873b862618beb04667ad44eeb9a2ba05625739b0982cca5fc705fb15fe11"
+    },
+    {
+      "path": "portfolio/thumbnails/page-45.webp",
+      "bytes": 11512,
+      "sha256": "bd0556e6ed95fc381165acf539da492f9284137cc84769423502c260f38ebf19"
+    },
+    {
+      "path": "research/defensible-space/design-workflow.jpg",
+      "bytes": 145253,
+      "sha256": "9ac7ead4853321058e67d4826c9e73ce04ae6024ac263e4a652b748a24187adf"
+    },
+    {
+      "path": "research/wildfire-as-urban-risk/figures/figure-01.webp",
+      "bytes": 237772,
+      "sha256": "1af57f9b2c13a4effac459807320fcc17581a00e705415ba743f1f01db2ac34b"
+    },
+    {
+      "path": "research/wildfire-as-urban-risk/figures/figure-02.webp",
+      "bytes": 156074,
+      "sha256": "490245d314b5886e8604c9e1e65e23790aa0612ad908b19db4f98d863f863d00"
+    },
+    {
+      "path": "research/wildfire-as-urban-risk/figures/figure-03.webp",
+      "bytes": 261332,
+      "sha256": "5ebd4be75f4e9fc4d2fd0db548a2e33898d882f114fa747d2fbbb7bf0205cd4b"
+    },
+    {
+      "path": "research/wildfire-as-urban-risk/figures/figure-04.webp",
+      "bytes": 122994,
+      "sha256": "90a63a7ec99d5535e9d3e203094711873bfc447aaad3028ce712da57171122a2"
+    },
+    {
+      "path": "research/wildfire-as-urban-risk/figures/figure-05.webp",
+      "bytes": 235350,
+      "sha256": "92ad41aaa3d41db273b51027bdad940bbe69c7f30ccc50c163ee2193985a99b4"
+    },
+    {
+      "path": "research/wildfire-as-urban-risk/figures/figure-06.webp",
+      "bytes": 324782,
+      "sha256": "787b64ff10c7beca12ac673d1450ab643256a9d7d5ce98c97d22c4bbae968bc1"
+    },
+    {
+      "path": "research/wildfire-as-urban-risk/figures/figure-07.webp",
+      "bytes": 202654,
+      "sha256": "f164a5ad4a0ddb6acd75b3aabf1c10e6d44f9700136838d678835a5a640a933a"
+    },
+    {
+      "path": "research/wildfire-as-urban-risk/figures/figure-08.webp",
+      "bytes": 175480,
+      "sha256": "f7a4f0eeec5e64d1d0b4e5f75a6867e5dec8f21e59f619506eb8af3d5b6c1fb3"
+    },
+    {
+      "path": "research/wildfire-as-urban-risk/figures/figure-09.webp",
+      "bytes": 125976,
+      "sha256": "eb1c27db24f700fd34681770f0c16b2a524d9c3027c824802058b3ab77520082"
+    },
+    {
+      "path": "research/wildfire-as-urban-risk/figures/figure-10.webp",
+      "bytes": 95388,
+      "sha256": "0baa72185028c3473c6d47e027ea75bf937d4643c69793be1967732f8af17561"
+    },
+    {
+      "path": "research/wildfire-as-urban-risk/paper.pdf",
+      "bytes": 6178785,
+      "sha256": "2da2304884559f3eea741c4d9027e246bde4b2dd53abbc51fead50590395563b"
+    }
+  ]
+}

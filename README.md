@@ -1,47 +1,84 @@
 # xyz / A Clearing
 
-A personal landscape research and design website for Xinyi Zhang. The homepage is a pannable, zoomable clearing with ten works, draggable project markers, a Connections arrangement, random discovery, and a temporary gathered collection; the Academic view provides a direct research index. Research details, About, and CV open in accessible panels. The complete landscape portfolio opens in a page reader with chapter navigation, keyboard paging, zoom, and pan.
+Sydnie Zhang 的个人网站：以一处共同的 Clearing 连接研究、景观设计与绘画，提供场景探索、Connections、完整作品集阅读器和 Academic 模式。
 
-## Local development
+## 内容和资料目录
 
-Use Node 22.13 or newer and pnpm 11.19.0.
+```text
+data/                              # 网站实际读取的可编辑内容
+├── site.ts                        # 姓名、联系方式、首页理念
+├── projects.ts                    # 研究与作品集的项目介绍
+├── portfolio/projects.ts          # 8 个章节、45 页标题和页码范围
+├── research/wildfire-as-urban-risk.ts  # 论文、摘要、图表说明及比较数据
+├── exploration/scenes.ts          # 场景、路线、Clearing 中的入口坐标
+├── exploration/connections.ts     # 项目关联和布局坐标
+└── assets.json                    # 素材清单、文件大小与 SHA-256
+
+public/data/                       # 随网站发布的图片与 PDF
+├── exploration/
+│   ├── scenes/                    # Clearing 与各项目的插画场景
+│   └── ant-scape/                 # 蚂蚁、算法和城市三种尺度
+├── portfolio/
+│   ├── pages/                     # 完整作品集的 45 页 JPG
+│   ├── thumbnails/                # 对应的 45 页 WebP 缩略图
+│   └── covers/                    # 作品集概览图片
+└── research/
+    ├── wildfire-as-urban-risk/
+    │   ├── paper.pdf              # 完整的 26 页正式论文
+    │   └── figures/               # 原论文的全部 10 张图
+    └── defensible-space/
+        └── design-workflow.jpg    # 原始设计工作流图
+```
+
+`data/README.md` 说明各项内容如何更新。`lib/` 保留路径、相机和阅读器等功能代码；`components/clearing/` 是交互界面；`app/page.tsx` 包含页面结构、Academic 和 About/CV 的完整履历。
+
+字体位于 `public/fonts/`：Clearing Display 是根据艺术字参考创作的字体，Jost 用于正文与导航。素材来源和署名见 `ARTWORK.md`。
+
+## 本地运行
+
+需要 Node.js 22.13 或以上，以及 pnpm 11.19.0。
 
 ```sh
-pnpm install
+npm install -g pnpm@11.19.0
+pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-## Publishing from GitHub
+在终端显示的地址打开网站。检查内容和文件链接：
 
-The site produces static HTML and assets in `dist/client` using `pnpm build`. Push this project to a GitHub repository with `main` as its default branch. In Settings → Pages, choose GitHub Actions. The included workflow builds and publishes on pushes to `main`, and supports either a user site or a repository subpath. A custom domain can be configured in GitHub Pages settings.
+```sh
+pnpm check
+```
 
-The optional `.openai/hosting.json` identifies the private Sites concept preview. It is not needed by GitHub Pages; the build has no server, database, or Sites runtime dependency.
+新增、替换或移动 `public/data/` 内的文件后，更新素材清单：
 
-## Content and assets
+```sh
+pnpm data:index
+```
 
-- `app/page.tsx`: project content, publication, biographical text, and view switching.
-- `components/clearing/explorer.tsx`: mouse, touch, and keyboard exploration; work selection, arrangements, and gathering.
-- `lib/clearing-map.ts`: editorial connections, initial arrangements, and camera geometry. The positions form a diagram, not a geographic map.
-- `scripts/check-clearing.mjs`: camera geometry and work/connection integrity checks.
-- `lib/portfolio.ts`: eight chapters (seven design projects and personal drawings), page ranges, and captions.
-- `components/clearing/portfolio.tsx`: the complete portfolio index and accessible page reader.
-- `public/images/portfolio/`: all 45 original PDF pages at 2400 pixels; `portfolio-thumbs/` contains lightweight WebP previews.
-- Typography uses the system Helvetica Neue / Helvetica / Arial stack. The earlier Manrope font and license remain in the source but are no longer loaded.
-- `app/globals.css`: responsive visual design and reduced-motion behavior.
-- `public/images/homeland.jpg`, `landscape-language.jpg`, `living-with-water.jpg`: original portfolio images supplied by Xinyi Zhang, rendered from the source PDF.
-- `public/images/defensible-design.jpg`: supplied Autodesk research submission, rendered from the source PDF.
-- `public/images/clearing.png`: original botanical concept artwork made with built-in Imagegen. Prompt and source notes are in `ARTWORK.md`.
+## 从 GitHub 更新网站
 
-The research paper is marked published as of 8 July 2026. The defensible-space project is labeled research in progress, and its review limitations are retained. The CV panel is a selected web summary, not a replacement for the full academic résumé. The original source PDFs are not bundled. All 45 portfolio pages are displayed as supplied, including original captions and credits; the website biography uses the current academic contact address.
+仓库：[xinyizh-sydnie/xyz-a-clearing](https://github.com/xinyizh-sydnie/xyz-a-clearing)
 
-Direct links: `?view=academic`, `?project=wildfire`, `?project=defensible`, `?project=landscape`, `?project=about`, and `?project=cv`. The project and view parameters can be combined. Portfolio chapters also accept `?project=living-with-water&page=21`, for example; `?project=landscape&page=1` opens all 45 pages. Page turns update the URL without adding a separate browser-history entry for every page.
+GitHub Pages 使用 `.github/workflows/pages.yml`：每次推送到 `main`，会检查网站、生成静态页面并发布。构建输出是 `dist/client/`，无需数据库或服务器。流程从 GitHub Pages 设置读取网站子路径，使用 `pnpm build:github` 生成并验证发布目录，因此图片、论文和脚本可在仓库路径下正常加载。普通 `pnpm build` 用于根路径部署。
 
-## Design references
+```sh
+git add .
+git commit -m "Update website content"
+git push origin main
+```
 
-The current typography direction follows [Columbia GSAPP](https://www.arch.columbia.edu/), whose live CSS uses `union-regular`. [Union](https://radimpesko.com/fonts/union) blends Arial and Helvetica; this site uses the system Helvetica Neue / Helvetica / Arial stack as an approximation, with regular weight, open spacing, and uppercase navigation. No proprietary Union font files are bundled. Earlier layout references were [Stockholm Design Lab](https://www.stockholmdesignlab.se/) and [Form Us With Love](https://www.formuswithlove.se/). Botanical exploration is informed by the user’s [Pollinator Pathmaker](https://pollinator.art/us) reference. All project drawings remain the supplied portfolio artwork.
+发布进度可在仓库的 **Actions** 中查看。`dist/`、`node_modules/`、本地环境变量和开发缓存不提交到 GitHub。
 
-## Exploring the clearing
+`.openai/hosting.json` 保留现有 Sites 私人预览的项目标识；它不包含凭据，也不是 GitHub Pages 的运行依赖。
 
-Drag empty space to pan; drag a work to rearrange it. Use the zoom buttons or slider; Ctrl/Command + wheel zooms in the embedded view, and wheel zooms in the expanded view. Touch supports pan and pinch on empty space. Tab to a work and press Enter to inspect it; Alt + arrow keys move a focused work. Focus the map itself to pan with arrow keys, zoom with +/−, and reset with Home. The reset button restores the current arrangement.
+## 直接链接
 
-Connections are editorial associations between the supplied projects, not measured geographic or statistical relationships. “Gather” keeps work IDs in memory for this mounted exploration session only; it uses no storage or external service. Switching to Academic or reloading clears that collection.
+- `?view=academic`：学术页面
+- `?project=wildfire`：论文与图表阅读器
+- `?project=defensible`：当前研究
+- `?project=landscape&page=1`：完整作品集
+- `?project=living-with-water&page=21`：指定项目和页面
+- `?project=about` / `?project=cv`：个人介绍和 CV
+
+作品集原页及署名完整保留。论文来自作者提供的 CC BY 4.0 正式文章；仅去掉下载平台生成的封面。场景插画是将不同项目联系起来的概念景观，具体设计和研究内容以原始作品集及论文为准。

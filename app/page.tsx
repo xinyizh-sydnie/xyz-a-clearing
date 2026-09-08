@@ -11,13 +11,10 @@ import { portfolio, type PortfolioId } from '@/lib/portfolio';
 
 type View = 'explore' | 'academic';
 type Entry = 'wildfire' | 'defensible' | 'landscape' | 'about' | 'cv' | PortfolioId;
-const base = process.env.NEXT_PUBLIC_BASE_PATH || '';
-const asset = (name: string) => `${base}/images/${name}`;
-const projects = [
-  { id:'wildfire' as const, number:'01', category:'Published research', title:'Wildfire as urban risk', subtitle:'Global synthesis of compound hazards, cascade pathways, and research-exposure-vulnerability mismatch', question:'What happens when wildfire risk reaches beyond the burn perimeter?', description:'Investigating how wildfire-linked risks travel through urban systems, and where research attention, exposure, and vulnerability diverge.', image:'', link:'https://doi.org/10.1088/1748-9326/ae8039', linkLabel:'Read the paper', tags:['Wildfire','Urban risk','Global synthesis'] },
-  { id:'defensible' as const, number:'02', category:'Research in progress', title:'Where the Fire Stopped', subtitle:'AI-driven defensible space design from post-fire evidence', question:'How can landscape evidence inform the spaces around our homes?', description:'Connecting pre-fire landscape conditions and post-fire building outcomes in the 2025 Eaton Fire with a workflow for generating and reviewing site-specific landscape alternatives.', image:'defensible-design.jpg', link:'https://xinyizh-sydnie.github.io/eaton-evidence-hub/', linkLabel:'Explore the evidence hub', tags:['Defensible space','GeoAI','Design research'] },
-  { id:'landscape' as const, number:'03', category:'Landscape architecture', title:'In Seek of Homeland', subtitle:'Landscapes of memory, change, and belonging', question:'What makes a landscape feel like home?', description:'A collection of landscape architecture projects exploring water, ecology, cultural memory, and the ways people make a place their own.', image:'homeland.jpg', link:'', linkLabel:'', tags:['Landscape architecture','Urban design','Illustration'] },
-];
+import { base, dataAsset as asset } from '@/lib/assets';
+import { projects } from '@/data/projects';
+import { site } from '@/data/site';
+
 const validEntry = (value:string | null):value is Entry => ['wildfire','defensible','landscape','about','cv',...portfolio.map(p=>p.id)].includes(value || '');
 
 export default function Home() {
@@ -68,7 +65,7 @@ export default function Home() {
     <main id="main-content">
       <TabsContent value="explore" className="explore-view">
         <section className="clearing-section" aria-label="Explore Sydnie Zhang's work">
-          <div className="clearing-introduction"><h1 className="display-heading">Sydnie Zhang</h1><p className="clearing-concept">A Clearing brings research, landscape design, and drawing into a shared landscape. It is a place to pause, move between scales, and notice connections: between fire and the city, water and settlement, small ecologies and everyday life. Each path offers a different way of looking at the places we inhabit.</p></div>
+          <div className="clearing-introduction"><h1 className="display-heading">{site.preferredName}</h1><p className="clearing-concept">{site.concept}</p></div>
           <SceneJourney onOpen={open} visited={visited}/>
           <div className="clearing-after"><span>37.87° N / 122.26° W — Berkeley, California</span><a href="#portfolio">Portfolio <ArrowRight size={15}/></a></div>
         </section>

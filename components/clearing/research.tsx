@@ -5,14 +5,14 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { base } from '@/lib/portfolio';
+import { dataAsset } from '@/lib/assets';
 import { paper, landSettings, paperFigures, figureImage } from '@/lib/research';
 
 export function ResearchSection({ onOpen, onAcademic }: { onOpen: (id: 'wildfire' | 'defensible') => void; onAcademic: () => void }) {
   return <section id="research-work" className="selected-work research-section">
     <div className="section-heading"><div><p className="eyebrow">Current work</p><h2 className="display-heading">Research</h2></div><Button variant="ghost" className="text-action" onClick={onAcademic}>Academic index <ArrowUpRight size={16}/></Button></div>
     <article className="research-lead"><div className="research-lead-copy"><p className="eyebrow">Environmental Research Letters · 2026</p><h3>{paper.title}</h3><p className="research-deck">Compound hazards, urban cascades, and the places research overlooks.</p><p>A global synthesis of 3,625 studies connects the research record with fire occurrence, climate conditions, and social vulnerability.</p><Button className="research-read" onClick={() => onOpen('wildfire')}>Read the research <ArrowRight size={17}/></Button><span className="research-byline">Xinyi Zhang & Lu Liang</span></div><button className="research-lead-art" onClick={() => onOpen('wildfire')} aria-label="Explore the global research-risk mismatch"><img src={figureImage(7)} alt="Published maps of the mismatch between global fire burden, research attention, and social vulnerability." loading="lazy"/><span>Where fire, vulnerability, and research diverge <ArrowUpRight size={16}/></span></button></article>
-    <article className="research-ongoing"><button onClick={() => onOpen('defensible')} aria-label="Open Where the Fire Stopped"><img src={`${base}/images/defensible-design.jpg`} alt="Evidence-informed defensible space design alternatives." loading="lazy"/></button><div><p className="eyebrow">Research in progress</p><h3>Where the Fire Stopped</h3><p>From post-fire evidence to defensible space design. A study of 7,122 single-family homes in the 2025 Eaton Fire.</p><Button variant="ghost" className="text-action" onClick={() => onOpen('defensible')}>Explore the project <ArrowRight size={16}/></Button></div></article>
+    <article className="research-ongoing"><button onClick={() => onOpen('defensible')} aria-label="Open Where the Fire Stopped"><img src={dataAsset('research/defensible-space/design-workflow.jpg')} alt="Evidence-informed defensible space design alternatives." loading="lazy"/></button><div><p className="eyebrow">Research in progress</p><h3>Where the Fire Stopped</h3><p>From post-fire evidence to defensible space design. A study of 7,122 single-family homes in the 2025 Eaton Fire.</p><Button variant="ghost" className="text-action" onClick={() => onOpen('defensible')}>Explore the project <ArrowRight size={16}/></Button></div></article>
   </section>;
 }
 function MismatchComparison() {

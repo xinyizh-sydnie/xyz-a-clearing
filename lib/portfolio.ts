@@ -1,62 +1,7 @@
-export const base = process.env.NEXT_PUBLIC_BASE_PATH || '';
-export const folioImage = (page: number, thumb = false) => `${base}/images/portfolio${thumb ? '-thumbs' : ''}/page-${String(page).padStart(2, '0')}.${thumb ? 'webp' : 'jpg'}`;
-export const portfolio = [
-  { id: 'natural-as-calendar', number: '01', title: 'Natural as Calendar', subtitle: 'Revival of Indigenous Practice in Nature', start: 3, end: 9, cover: 8, theme: 'Seasons & memory', question: 'Can a landscape become a living calendar?' },
-  { id: 'ycd2050', number: '02', title: '#YCD2050', subtitle: 'Development of a Youth Centered District in 2050', start: 10, end: 14, cover: 12, theme: 'Community & urban futures', question: 'What would a city look like if young people shaped it?' },
-  { id: 'living-with-water', number: '03', title: 'Living with Water', subtitle: 'Preservation of a Precolonial Settlement', start: 15, end: 21, cover: 21, theme: 'Water & settlement', question: 'What if we designed with the rhythm of water?' },
-  { id: 'bride-market', number: '04', title: 'Bride Market', subtitle: 'Establishment of a Permanent Community', start: 22, end: 25, cover: 24, theme: 'Community & ritual', question: 'How can a temporary gathering become a lasting place?' },
-  { id: 'sediment-harvester', number: '05', title: 'Sediment Harvester', subtitle: 'Stimulation of a Resilient Shoreline', start: 26, end: 29, cover: 28, theme: 'Shorelines & change', question: 'Can sediment help a changing shoreline adapt?' },
-  { id: 'ant-scape', number: '06', title: 'Ant Scape', subtitle: 'Conception of Ant Algorithm Based Urban Design', start: 30, end: 35, cover: 34, theme: 'Ecology & computation', question: 'What can collective behavior teach us about cities?' },
-  { id: 'back-to-homeland', number: '07', title: 'Back to Homeland', subtitle: 'Reconstruction of a Post-disaster City', start: 36, end: 43, cover: 41, theme: 'Memory & reconstruction', question: 'How do we rebuild a place without losing its memory?' },
-  { id: 'homeland-drawings', number: '08', title: 'Homeland, drawn', subtitle: 'Watercolor and illustration', start: 44, end: 45, cover: 44, theme: 'Personal drawings', question: 'Which landscapes do we carry with us?' },
-] as const;
-export type PortfolioProject = typeof portfolio[number];
-export type PortfolioId = PortfolioProject['id'];
-export const pageCaptions = [
-  'In Seek of Homeland · Portfolio cover',
-  'Prologue · Time, intervention, and urbanization',
-  'Natural as Calendar · Project introduction and credits',
-  'Landmark landscape · Seasonal narratives',
-  'The Lenape in Pennsylvania · Historical mapping',
-  'Natural as Calendar · Site mapping',
-  'Seasonal trail organization · Model and diagrams',
-  'The rhythm of seasonality · Plan and calendar',
-  'Spring, summer, autumn, winter · Seasonal perspectives',
-  '#YCD2050 · Project introduction and credits',
-  'Youth neighborhoods · District context',
-  'Population, policy, climate · Urban layers',
-  '#YCD2050 · Master plan and sections',
-  'Corridor, creek park, campus · Design proposals',
-  'Living with Water · Project introduction and credits',
-  'Living with Water · Site mapping and sections',
-  'Living with Water · Water strategy',
-  'Living with Water · Regional plan',
-  'Living with Water · Urban design and section',
-  'Living with Water · Street-level perspectives',
-  'Rainy season / dry season · Two views of the proposal',
-  'Bride Market · Project introduction and credits',
-  'Bride Market · Context and community',
-  'Bride Market · The proposal in detail',
-  'Bride Market · Spaces for gathering',
-  'Sediment Harvester · Project introduction and credits',
-  'Sediment Harvester · Coastal processes and context',
-  'Hydrodynamic modeling · Studies and model',
-  'Sediment Harvester · Master plan and landscape systems',
-  'Ant Scape · Project introduction and credits',
-  'Ant Scape · Algorithm experiments',
-  'Ant Scape · From behavior to urban form',
-  'Ant Scape · Network and spatial studies',
-  'Ant Scape · Urban landscape perspective',
-  'Ant Scape · Public space and sections',
-  'Back to Homeland · Project introduction and credits',
-  'Back to Homeland · Cultural memory and context',
-  'Back to Homeland · Landscape elements',
-  'Back to Homeland · Site mapping and design process',
-  'Back to Homeland · Planting over time',
-  'Back to Homeland · A landscape of shared memories',
-  'Back to Homeland · Scenes of everyday life',
-  'Back to Homeland · Reconstructed city panorama',
-  'Homeland scenario · Watercolor, Forbidden City',
-  'An illustration of my homeland · Guilin',
-];
+import { portfolio } from '../data/portfolio/projects';
+import { dataAsset } from './assets';
+export { base } from './assets';
+export { portfolio, pageCaptions } from '../data/portfolio/projects';
+export type { PortfolioProject, PortfolioId } from '../data/portfolio/projects';
+export const folioImage = (page: number, thumb = false) => dataAsset(`portfolio/${thumb ? 'thumbnails' : 'pages'}/page-${String(page).padStart(2, '0')}.${thumb ? 'webp' : 'jpg'}`);
 export const projectAtPage = (page: number) => portfolio.find(p => page >= p.start && page <= p.end);

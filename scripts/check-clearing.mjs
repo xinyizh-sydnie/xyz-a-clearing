@@ -2,10 +2,15 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import ts from 'typescript';
 const moduleUrl = source => `data:text/javascript;base64,${Buffer.from(source).toString('base64')}`;
-const compile = path => ts.transpileModule(readFileSync(new URL(path, import.meta.url), 'utf8'), { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText;
-const portfolioUrl = moduleUrl(compile('../lib/portfolio.ts'));
-const mapCode = compile('../lib/clearing-map.ts').replace("'./portfolio'", JSON.stringify(portfolioUrl));
-const { viewpointCamera, travelCamera, connectionsCamera, clearingCamera, focusCamera, fitCamera, zoomAt, movePoint, works, arrangements, connections, WORLD, ZOOM } = await import(moduleUrl(mapCode));
+const compiledModules = new Map();
+function sourceModule(url) {
+ if(compiledModules.has(url.href))return compiledModules.get(url.href);
+ let source=ts.transpileModule(readFileSync(url,'utf8'),{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText;
+ source=source.replace(/(\bfrom\s*)(['"])(\.{1,2}\/[^'"]+)\2/g,(_,prefix,quote,specifier)=>prefix+JSON.stringify(sourceModule(new URL(specifier+'.ts',url))));
+ const encoded=moduleUrl(source);compiledModules.set(url.href,encoded);return encoded;
+}
+const importSource=path=>import(sourceModule(new URL(path,import.meta.url)));
+const { viewpointCamera, travelCamera, connectionsCamera, clearingCamera, focusCamera, fitCamera, zoomAt, movePoint, works, arrangements, connections, WORLD, ZOOM } = await importSource('../lib/clearing-map.ts');
 const near = (actual, expected) => assert.ok(Math.abs(actual - expected) < 1e-8, `${actual} != ${expected}`);
 // Zooming keeps the world point under the pointer fixed, even at the bounds.
 for (const initial of [{ x: -320, y: 110, zoom: .6 }, { x: 20, y: -45, zoom: 1.3 }]) {
@@ -72,8 +77,7 @@ for (const size of [{ width: 375, height: 570 }, { width: 1440, height: 740 }]) 
  }
  const network=connectionsCamera(size);assert.ok(network.zoom>=.45);
 }
-const researchUrl=moduleUrl(compile('../lib/research.ts').replace("'./portfolio'",JSON.stringify(portfolioUrl)));
-const {landSettings,paperFigures}=await import(researchUrl);
+const {landSettings,paperFigures,paper,figureImage}=await importSource('../lib/research.ts');
 near(landSettings.reduce((n,s)=>n+s.fire,0),100);
 near(landSettings.reduce((n,s)=>n+s.research,0),100);
 near(landSettings[1].fire,28.7);near(landSettings[1].research,.9);
@@ -81,7 +85,7 @@ assert.deepEqual(paperFigures.map(f=>f.number),[1,2,3,4,5,6,7,8,9,10]);
 for(const f of paperFigures)assert.ok(f.page>=1&&f.page<=26);
 console.log('Near/far travel endpoints, monotonic zoom, readable network scale, and published research shares verified.');
 
-const journeyModule=await import(moduleUrl(compile('../lib/journey.ts').replace("'./portfolio'",JSON.stringify(portfolioUrl))));
+const journeyModule=await importSource('../lib/journey.ts');
 const {journey,journeyFrame,clearingPaths,boundJourneyCamera,scenePoint}=journeyModule;
 assert.equal(journey[0].kind,'clearing');
 assert.equal(journey.at(-1).kind,'clearing');
@@ -129,7 +133,18 @@ for(const size of [{width:375,height:510},{width:1440,height:560},{width:820,hei
 console.log('All project paths return to the shared clearing; scene boundaries, visible overview anchors, and gap-free pan/zoom verified.');
 
 for(const scene of journey) {
- const file = new URL('../public/images/journey/'+scene.image,import.meta.url);
+ const file = new URL('../public/data/'+scene.image,import.meta.url);
  assert.ok(existsSync(file),`Missing scene: ${scene.id}`);
 }
 console.log('Every scene asset is present.');
+
+const {folioImage,pageCaptions}=await importSource('../lib/portfolio.ts');
+const {base,dataAsset}=await importSource('../lib/assets.ts');
+const publicFile=url=>new URL('../public'+url.slice(base.length),import.meta.url);
+assert.equal(pageCaptions.length,45);
+for(let page=1;page<=45;page++)for(const thumb of [false,true])assert.ok(existsSync(publicFile(folioImage(page,thumb))));
+for(const figure of paperFigures)assert.ok(existsSync(publicFile(figureImage(figure.number))));
+assert.ok(existsSync(publicFile(paper.pdf)));
+assert.equal(dataAsset('exploration/scenes/clearing-hub.webp'),base+'/data/exploration/scenes/clearing-hub.webp');
+for(const file of ['research/defensible-space/design-workflow.jpg','exploration/ant-scape/ground.png','exploration/ant-scape/algorithm.webp','exploration/ant-scape/city.webp','portfolio/covers/homeland.jpg'])assert.ok(existsSync(publicFile(dataAsset(file))));
+console.log('Relocated assets and deployment-prefixed links preserve all portfolio pages, research figures, PDF and exploration details.');

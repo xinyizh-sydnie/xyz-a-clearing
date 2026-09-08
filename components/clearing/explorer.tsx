@@ -7,10 +7,11 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Slider } from '@/components/ui/slider';
 import { AntLens } from '@/components/clearing/ant-lens';
 import { figureImage } from '@/lib/research';
-import { base, folioImage } from '@/lib/portfolio';
+import { folioImage } from '@/lib/portfolio';
+import { dataAsset } from '@/lib/assets';
 import { arrangements, connections, connectionsCamera, connectionCurve, travelCamera, viewpointCamera, clearingCamera, focusCamera, fitCamera, movePoint, works, WORLD, zoomAt, type Arrangement, type Camera, type Point, type Size, type WorkId } from '@/lib/clearing-map';
 
-const workImage = (work: typeof works[number]) => work.id === 'wildfire' ? figureImage(7) : work.image === 'portfolio' ? folioImage(work.cover, true) : `${base}/images/${work.image === 'defensible' ? 'defensible-design.jpg' : 'clearing.png'}`;
+const workImage = (work: typeof works[number]) => work.id === 'wildfire' ? figureImage(7) : work.image === 'portfolio' ? folioImage(work.cover, true) : dataAsset(work.image === 'defensible' ? 'research/defensible-space/design-workflow.jpg' : 'exploration/scenes/clearing.png');
 type PointerGesture = { origin: Point; camera: Camera; distance?: number };
 type NodeGesture = { id: WorkId; origin: Point; point: Point; moved: boolean };
 
@@ -157,7 +158,7 @@ export function ClearingExplorer({ onOpen, visited, networkOnly = false }: { onO
       if (movement[event.key]) { event.preventDefault(); applyCamera(old => ({ ...old, x: old.x + movement[event.key].x, y: old.y + movement[event.key].y })); }
     }}>
       <div className="explorer-world" style={{ width: WORLD.width, height: WORLD.height, transform: `translate(${camera.x}px,${camera.y}px) scale(${camera.zoom})`, transition: moving || flying ? 'none' : undefined }}>
-        <img className="explorer-landscape" src={`${base}/images/clearing.png`} alt="" draggable={false} width="1500" height="1000" />
+        <img className="explorer-landscape" src={dataAsset('exploration/scenes/clearing.png')} alt="" draggable={false} width="1500" height="1000" />
         <svg className="connection-drawing" width={WORLD.width} height={WORLD.height} viewBox={`0 0 ${WORLD.width} ${WORLD.height}`} aria-hidden="true">{connections.map((edge, index) => {
           const from = positions[edge.from], to = positions[edge.to];
           const lit = highlight === edge.from || highlight === edge.to;
