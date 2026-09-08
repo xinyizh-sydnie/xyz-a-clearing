@@ -41,3 +41,7 @@ A single new Imagegen composition connects the individual project scenes into a 
 ## Repository data layout
 
 Media are grouped by purpose under `public/data/exploration/`, `public/data/portfolio/`, and `public/data/research/`. Source text, metadata and spatial links are under `data/`. `data/assets.json` indexes all media files with byte lengths and SHA-256 checksums. The directory migration preserves the supplied image and PDF bytes.
+
+## Immersive viewing
+
+The immersive walk reuses the existing scene paintings unchanged. At runtime the painting is composited into soft foreground and distance bands; these respond at different rates to pointer movement. This is an illustrative parallax treatment, not a reconstructed 3D environment. The original source images and their provenance above remain unchanged.

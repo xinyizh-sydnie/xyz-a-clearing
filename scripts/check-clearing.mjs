@@ -148,3 +148,37 @@ assert.ok(existsSync(publicFile(paper.pdf)));
 assert.equal(dataAsset('exploration/scenes/clearing-hub.webp'),base+'/data/exploration/scenes/clearing-hub.webp');
 for(const file of ['research/defensible-space/design-workflow.jpg','exploration/ant-scape/ground.png','exploration/ant-scape/algorithm.webp','exploration/ant-scape/city.webp','portfolio/covers/homeland.jpg'])assert.ok(existsSync(publicFile(dataAsset(file))));
 console.log('Relocated assets and deployment-prefixed links preserve all portfolio pages, research figures, PDF and exploration details.');
+
+const { SCENE, coverScale, constrainSceneCamera, placeCamera, overviewCamera, projectScenePoint, unprojectScenePoint, zoomSceneAt, easeSceneCamera } = await importSource('../lib/scene-camera.ts');
+for (const size of [{width:320,height:600},{width:820,height:1024},{width:1440,height:810},{width:2880,height:1380}]) {
+ const entry = placeCamera(size);
+ assert.ok(entry.zoom >= coverScale(size));
+ const all = overviewCamera(size);
+ for(const point of [...clearingPaths,journey[0].object]) {
+  const projected = projectScenePoint(point, all);
+  assert.ok(projected.x>=0&&projected.x<=size.width&&projected.y>=0&&projected.y<=size.height);
+  const recovered = unprojectScenePoint(projected,all);near(recovered.x,point.x);near(recovered.y,point.y);
+  // Even paths outside the initial crop remain reachable by camera travel at every aspect ratio.
+  const arrival=projectScenePoint(point,placeCamera(size,point,2.7));
+  assert.ok(arrival.x>=0&&arrival.x<=size.width&&arrival.y>=0&&arrival.y<=size.height);
+ }
+ for(const zoom of [coverScale(size),coverScale(size)*1.14,coverScale(size)*4,100]) {
+  for(const x of [-1e5,0,1e5])for(const y of [-1e5,0,1e5]) {
+   const view=constrainSceneCamera({zoom,x,y},size);
+   assert.ok(view.x<=1e-8 && view.x+SCENE.width*view.zoom>=size.width-1e-8);
+   assert.ok(view.y<=1e-8 && view.y+SCENE.height*view.zoom>=size.height-1e-8);
+  }
+ }
+ // Zooming about the pointer preserves the chosen ground location away from clamped image edges.
+ const anchor={x:size.width*.45,y:size.height*.55};
+ const close=zoomSceneAt(entry,entry.zoom*1.5,anchor,size);
+ const before=unprojectScenePoint(anchor,entry),after=unprojectScenePoint(anchor,close);
+ near(before.x,after.x);near(before.y,after.y);
+ // Half-time steps produce the same damping as one full-time step.
+ const destination=placeCamera(size,{x:.2,y:.7},2.1);
+ const full=easeSceneCamera(entry,destination,32);
+ const halves=easeSceneCamera(easeSceneCamera(entry,destination,16),destination,16);
+ for(const key of ['x','y','zoom'])near(full[key],halves[key]);
+ assert.deepEqual(easeSceneCamera(entry,destination,16,true),destination);
+}
+console.log('Immersive camera: all paths reachable, image edges bounded, pointer zoom anchored, and time-based/reduced-motion travel verified.');
