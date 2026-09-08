@@ -84,7 +84,7 @@ export function SceneJourney({ onOpen, visited }: { onOpen: (id: WorkId) => void
         <TabsContent value="walk" className="walk-content">
           <div ref={scrollRoot} className="journey-scroll" style={{ height: `calc(var(--journey-height) + var(--journey-step) * ${journey.length})` }}>
             <div ref={sticky} className="journey-sticky">
-              <ImmersiveScene scene={current} progress={displayedIndex === frame.index ? frame.local : 0} reducedMotion={reducedMotion}
+              <ImmersiveScene scene={current}
                 onEnter={index => seek(index)} onOpen={openWork} onNext={() => seek(displayedIndex + 1)} onPrevious={() => seek(displayedIndex - 1)} atStart={position <= 0} atEnd={frame.arrived}/>
               <div className="scene-route-progress" aria-hidden="true"><span style={{ width: `${position / last * 100}%` }}/></div>
               <span className="sr-only" aria-live="polite">{current.title}</span>

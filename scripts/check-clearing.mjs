@@ -149,7 +149,7 @@ assert.equal(dataAsset('exploration/scenes/clearing-hub.webp'),base+'/data/explo
 for(const file of ['research/defensible-space/design-workflow.jpg','exploration/ant-scape/ground.png','exploration/ant-scape/algorithm.webp','exploration/ant-scape/city.webp','portfolio/covers/homeland.jpg'])assert.ok(existsSync(publicFile(dataAsset(file))));
 console.log('Relocated assets and deployment-prefixed links preserve all portfolio pages, research figures, PDF and exploration details.');
 
-const { SCENE, coverScale, constrainSceneCamera, placeCamera, overviewCamera, projectScenePoint, unprojectScenePoint, zoomSceneAt, easeSceneCamera } = await importSource('../lib/scene-camera.ts');
+const { SCENE, coverScale, constrainSceneCamera, placeCamera, overviewCamera, projectScenePoint, unprojectScenePoint, zoomSceneAt, maximumSceneScale } = await importSource('../lib/scene-camera.ts');
 for (const size of [{width:320,height:600},{width:820,height:1024},{width:1440,height:810},{width:2880,height:1380}]) {
  const entry = placeCamera(size);
  assert.ok(entry.zoom >= coverScale(size));
@@ -174,11 +174,10 @@ for (const size of [{width:320,height:600},{width:820,height:1024},{width:1440,h
  const close=zoomSceneAt(entry,entry.zoom*1.5,anchor,size);
  const before=unprojectScenePoint(anchor,entry),after=unprojectScenePoint(anchor,close);
  near(before.x,after.x);near(before.y,after.y);
- // Half-time steps produce the same damping as one full-time step.
- const destination=placeCamera(size,{x:.2,y:.7},2.1);
- const full=easeSceneCamera(entry,destination,32);
- const halves=easeSceneCamera(easeSceneCamera(entry,destination,16),destination,16);
- for(const key of ['x','y','zoom'])near(full[key],halves[key]);
- assert.deepEqual(easeSceneCamera(entry,destination,16,true),destination);
+ // Zoom requests stop at the artwork's display limit instead of enlarging indefinitely.
+ const maximum = constrainSceneCamera({ ...entry, zoom: 100 }, size);
+ near(maximum.zoom, maximumSceneScale(size));
+ assert.ok(maximum.zoom <= Math.max(coverScale(size),1.25));
+
 }
-console.log('Immersive camera: all paths reachable, image edges bounded, pointer zoom anchored, and time-based/reduced-motion travel verified.');
+console.log('Immersive camera: all paths reachable, image edges bounded, pointer zoom anchored, and image magnification limited.');

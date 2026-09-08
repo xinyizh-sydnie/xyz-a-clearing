@@ -44,4 +44,4 @@ Media are grouped by purpose under `public/data/exploration/`, `public/data/port
 
 ## Immersive viewing
 
-The immersive walk reuses the existing scene paintings unchanged. At runtime the painting is composited into soft foreground and distance bands; these respond at different rates to pointer movement. This is an illustrative parallax treatment, not a reconstructed 3D environment. The original source images and their provenance above remain unchanged.
+The walk displays each existing painting once, without depth-band compositing, blur filters, or animated camera effects. Panning and bounded zoom respond only to explicit input. Original source images and their provenance above remain unchanged.
